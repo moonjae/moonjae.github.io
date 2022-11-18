@@ -1,6 +1,6 @@
 # Mandatory settings
 
-blog_theme: dark # Or use dark
+blog_theme: light # Or use dark
 name: Jae Moon
 paginate: 25
 url: https://moonjae.github.io/
@@ -16,12 +16,12 @@ scrollappear_enabled: true # Change to false to disable
 tag_nav_enabled: false # Change to true if you wish to show an additional 'tag-list' navigation below the header
 theme_toggle: false # Change to true if you wish to show an icon in the navigation for dynamic theme toggling
 social:
-  dribbble: nielsenramon # Add your Dribbble handle
+  dribbble:  # Add your Dribbble handle
   facebook: # Add your Facebook handle
   flickr: # Add your Flickr handle
-  github: nielsenramon # Add your GitHub handle
-  linkedin: # Add your LinkedIn handle
-  twitter: nielsenramon # Add your Twitter handle
+  github: # Add your GitHub handle
+  linkedin: jae-moon # Add your LinkedIn handle
+  twitter: # Add your Twitter handle
   email: # Add your Email address
   bitcoin: # Add your Bitcoin link or address
   ethereum: # Add your Ethereum link or address
