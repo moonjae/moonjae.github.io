@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "[LC] 2477. Minimum Fuel Cost to Report to the Capital"
+description: "https://leetcode.com/problems/minimum-fuel-cost-to-report-to-the-capital/description/"
 tags: [dfs, recursion]
 ---
 # Problem Statement
