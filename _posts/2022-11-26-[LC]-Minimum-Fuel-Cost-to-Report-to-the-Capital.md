@@ -3,7 +3,7 @@ layout: post
 title: "[LC] 2477. Minimum Fuel Cost to Report to the Capital"
 tags: [dfs, recursion]
 ---
-# [2477. Minimum Fuel Cost to Report to the Capital](https://leetcode.com/problems/minimum-fuel-cost-to-report-to-the-capital/description/)
+# Problem Statement
 There is a tree (i.e., a connected, undirected graph with no cycles) structure country network consisting of n cities numbered from 0 to n - 1 and exactly n - 1 roads. The capital city is city 0. You are given a 2D integer array roads where roads[i] = [ai, bi] denotes that there exists a bidirectional road connecting cities ai and bi.
 There is a meeting for the representatives of each city. The meeting is in the capital city.
 There is a car in each city. You are given an integer seats that indicates the number of seats in each car.
@@ -34,8 +34,8 @@ DFS
     - After calculating the above, we need to add it to the answer 
 
 # Complexity
-- Time complexity: $$O(n)$$ 
-- Space complexity: $$O(n)$$ 
+- Time complexity: O(n)
+- Space complexity: O(n)
 
 # Code
 ```
