@@ -113,5 +113,6 @@ int countSubarrays(vector<int>& nums, int k) {
         return answer;
     }
 ```
+
 # Take Away
 - when the problem related to + / - or left / right, consider using balance
