@@ -1,4 +1,0 @@
----
-slug: hashmap
-name: Hashmap
----
