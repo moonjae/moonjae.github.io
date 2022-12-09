@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[Math] Catalan Numbers"
-description: "Catalan Numbers / Couting Problem"
+description: "Catalan Numbers / Counting Problem"
 tags: [math]
 ---
 # Definition
@@ -13,7 +13,7 @@ The first few Catalan numbers for n = 0, 1, 2, 3, … are : 1, 1, 2, 5, 14, 42, 
 Cn 
 = (2n)!/((n + 1)!n!) 
 = binomialCoefficient(2n, n) / (n + 1)
-= Cn-1 * 2(2n + 1) / (n + 2)
+= Cn-1 * 2(2(n-1) + 1) / ((n-1) + 2)
 
 # Code
 binomialCoefficient(2n, n) / (n + 1)
@@ -49,7 +49,7 @@ unsigned long int catalan(unsigned int n)
 }
 ```
 
-Cn-1 * 2(2n + 1) / (n + 2)
+Cn+1 = Cn * 2(2n + 1) / (n + 2) 
 ```
 int getNthCatalan(int n) {
     int C = 1;
