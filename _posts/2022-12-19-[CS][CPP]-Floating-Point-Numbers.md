@@ -13,7 +13,7 @@ In C++, floating point numbers can be represented in two data types; float and d
 ### Double 
 1 sign bit + 11 bits for exponent + 52 bits for significant values 
 
-# Steps to convert IEEE 754 single/double representation
+# Steps for IEEE 754 single/double representation
 1. Convert floating number to binary number 
 - ex) 123.75
 - first, convert 123 into two's complement -> 1111011
