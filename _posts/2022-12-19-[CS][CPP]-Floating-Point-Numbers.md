@@ -43,22 +43,23 @@ Pictorial Explanation
 # Why bias is used 
 - exponent section consists of 8 bits 
 - if we had the first bit as sign bit that we are left with 7bits 
-- which means the minimum number we can possible have is 2 ^ 7 - 1 = 127
+- which means the minimum number we can represent 128 numbers each for pos and neg 
+-- one problem with this is neg:[-127: 0] pos:[0: 127] which means we have 2 different representations for 0 
+-- therfore, we can rearrange the ranges and make neg: [-127: 0] pos: [1: 128]
+-- because the minimum number we can have is -127, we can make all the possible numbers positive if we set bias to 127
 - So by using bias, represent everynumber as positive numbers so we can just store is as unsigned number 
+- and makes comparison easier 
 
 
 # Precision / When to use double over float and vice versa 
 - no of sig bits of float is 23 bits -> 8388608 -> 7 decimal digits 
 - no of sig bits of double is 52 bits -> 4.5035996e+15 -> 15 decimal digits 
 - double is about 2x more precise 
+- single precision arithmetic is faster 
 
 # Sources
 -https://stackoverflow.com/questions/2835278/what-is-a-bias-value-of-floating-point-numbers
 -https://www.log2base2.com/storage/how-float-values-are-stored-in-memory.html
-
-
-
-
-
-
+-https://www.youtube.com/watch?v=aE2kVS0O0OE (special numbers)
+https://www.youtube.com/watch?v=WZUPNXsusOA (denorms)
 
