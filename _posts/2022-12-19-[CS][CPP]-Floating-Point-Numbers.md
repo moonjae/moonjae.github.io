@@ -58,8 +58,8 @@ Pictorial Explanation
 - single precision arithmetic is faster 
 
 # Sources
--https://stackoverflow.com/questions/2835278/what-is-a-bias-value-of-floating-point-numbers
--https://www.log2base2.com/storage/how-float-values-are-stored-in-memory.html
--https://www.youtube.com/watch?v=aE2kVS0O0OE (special numbers)
-https://www.youtube.com/watch?v=WZUPNXsusOA (denorms)
+- https://stackoverflow.com/questions/2835278/what-is-a-bias-value-of-floating-point-numbers
+- https://www.log2base2.com/storage/how-float-values-are-stored-in-memory.html
+- https://www.youtube.com/watch?v=aE2kVS0O0OE (special numbers)
+- https://www.youtube.com/watch?v=WZUPNXsusOA (denorms)
 
