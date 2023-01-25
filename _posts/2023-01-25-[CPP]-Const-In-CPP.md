@@ -11,6 +11,7 @@ tags: [cpp]
 - ex) const int a = b Basically 'a' cannot be used to modify its value 'b'
 
 Here we can see, variable 'a' which is declared as const, is actually modified
+
 ```
 const int a = 3;
 const int * b = &a;
@@ -18,6 +19,7 @@ const int * b = &a;
 ```
 
 A pointer-to-const can point to a non-const object. What the pointer-to-const tells us is that we can't use 'b' to modify the value of 'a'
+
 ```
 int a = 3;
 const int * b = &a;
@@ -25,6 +27,7 @@ const int * b = &a;
 ```
 
 Below is considered illegal because the compiler does not allow you to create a non-const-pointer pointing to a const object since 'a' cannot be dereferenced and pointed by a non-const-pointer
+
 ```
 const int a = 3; 
 int * b = &a; // illegal 
@@ -38,6 +41,7 @@ int * b = &a; // illegal
     - The value can be modified but the pointer cannot be replaced with another pointer
 
 ### Const inside class
+
 ```
 class Test{
     public:
@@ -52,12 +56,14 @@ const Test b = {1};
 b.helper(); // illegal because the helper function can modify the member variables 
 ```
 
-therefore for cases above we need add const keywords to methods in order to represent that we do not intend to modify any member variables 
+Therefore for cases above we need add const keywords to methods in order to represent that we do not intend to modify any member variables 
+
 ```
 void helper() const { cout << a; }
 ```
 
-however there can be situations where we do need to modify one or more variables in that case we can use mutable keyword to the member variable we wish to modify
+However there can be situations where we do need to modify one or more variables in that case we can use mutable keyword to the member variable we wish to modify
+
 ```
 mutable int a; 
 ```
