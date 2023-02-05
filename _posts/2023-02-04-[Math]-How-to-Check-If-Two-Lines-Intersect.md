@@ -1,96 +1,35 @@
 ---
 layout: post
-title: "[CPP] Move Semantics"
-description: "Move Semantics"
-tags: [cpp]
+title: "[Math] How to check if two lines intersect"
+description: "How to check if two lines intersect"
+tags: [math]
 ---
+# How to check if two line segments intersect 
+Let's say we are given two line segments (p1, q1) and (p2, q2). 
+In order for there to be an intersection, it has to meet the following conditions.
 
+![](https://media.geeksforgeeks.org/wp-content/uploads/linesegments1.png)
+### General Case
+-(p1,q1,p2) and (p1,q1,q2) have different orientations and
+-(p2,q2,p1) and (p2,q2,q1) have different orientations 
 
-# Move Semantics 
-### lvalue reference 
-```
-void test(int& a);
-test(1);
-int a = 2;
-test(a);
-```
+### Special Case 
+-all 4 orientations are collinear and 
+-p2 or q2 can be found in the first line segment (p1, q1)
 
-First call to test is considered invalid because we are passing in a rvalue when lvalue is needed. 
+### Orientation 
+![](https://media.geeksforgeeks.org/wp-content/uploads/linesegments.png)
+Let's say there is line (a,b). If c falls above that line, the orientation will be counterclockwise and if below, we have a clockwise orientation. This is under an assumption that a.x < b.x  
 
-```
-void test(const int& a);
-test(1);
-```
-
-However, if we switch the function signture to take in const lvalue ref instead it will work fine. It will just create a temporary variable and use it as the argument.
-
-### Why Move Semantics is necessary
-```
-class String {
-public:
-    String() = default;
-    String(const char * input_str) {
-        cout << "Created" << endl;
-        length = strlen(input_str);
-        str = new char[length];
-        memcpy(str, input_str, length);
-    }
-    
-    String(const String& og){
-        cout << "Copied" << endl;
-        length = og.length;
-        str = new char[length];
-        memcpy(str, og.str, length);
-    }
-    
-    ~String() {
-        delete[] str;
-    }
-    
-private:
-    char * str;
-    int length;
-};
-
-
-class Wrapper{
-public:
-    Wrapper(const String& input_str) : str(input_str) {}
-
-private:
-    String str;
-};
-
-
-int main() {
-    Wrapper a("123");
-}
-```
-
-The result will look something like "Created \n Copied". One problem with this is that the copying part can become very costly if the object we are tying to copy is large and this is where move sematics comes in. 
-
-```
-String(String&& og) {
-    cout << "Moved" << endl;
-    length = og.length;
-    str = og.str;
-    og.str = nullptr;
-}
-```
-
-Let's overload the String constructor with a move construtor that takes in rvalue. Notice our previous constructor could take in both lvalue and rvalue and for this move constructor we will only take in rvalue and what it will do is basically shallow copying. Since it is a rvalue we know the input variable will not be reused so we can just do shallow copy and avoid memory allocation this way. 
-
-```
-Wrapper(String&& input_str) : str((String&&)input_str) {}
-```
-
-In the initializer list, we have to convert input_str into rvalue if not, the previously made String constructor will be called instead of the move constructor. Another way to do this is by using the std::move method.
-
-```
-Wrapper(String&& input_str) : str(move(input_str)) {}
-```
-
+1. calculate slope of line (a,b)
+2. the line can be represented in y = slope * x + where line meets the y intercept  
+    - calculate where line meets the y intercept; = b.y - slope * b.x
+    - from now on we will call the above T
+3. plug in c in to the equation above 
+4. calculate c.x * slope + T and see if it is larger than c.y 
+5. if it is larger than c.y -> clockwise
+6. if it is smaller than c.y -> counterclockwise
+7. else collinear 
 
 # Sources
-- move semantics: https://www.youtube.com/watch?v=ehMg6zvXuMY&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=89
-- std::move: https://www.youtube.com/watch?v=OWNeCTd7yQE&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&index=90
+- https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
