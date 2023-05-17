@@ -20,7 +20,6 @@ int dijkstra(int n, int src, int dst, unordered_map<int, vector<vector<int>>>& a
     priority_queue<vector<int>> pq;
     vector<bool> visited(n, false);
     vector<int> cost(n, INT_MAX);
-    visited[src] = true;
     cost[src] = 0;
     pq.push({src, 0});
     while (!pq.empty()) {
