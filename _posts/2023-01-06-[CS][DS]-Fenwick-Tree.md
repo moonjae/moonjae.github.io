@@ -13,6 +13,7 @@ tags: [cs, ds]
 - Fenwick tree is similar prefix sum array in that tree[i] represents aggregate sum of multiple indices
 - However while for prefix sum array, prefix[i] is sum of array 0 ~ i, this is not the case for Fenwick tree
 - Think of it as a *partial sum array*
+- Basically if A can turn into B after keep adding 1 to its last bit that is 1, they fall into same group 
 
 So now the question is how do we know which indices tree[i] need to contain?
 - Every indices can be represented in binary form ex) 2 -> 10 
