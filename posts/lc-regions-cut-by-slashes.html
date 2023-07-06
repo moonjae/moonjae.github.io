@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="nsnfLHRAA2-FGASGfBCEd3XnbtJDOYthzJ_vt2_qkJ8" />
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Jae Moon | [LC] 959. Regions Cut By Slashes</title>
+  <meta name="description" content="https://leetcode.com/problems/regions-cut-by-slashes/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 959. Regions Cut By Slashes">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io//posts/lc-regions-cut-by-slashes">
+  <meta property="og:description" content="https://leetcode.com/problems/regions-cut-by-slashes/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io//posts/lc-regions-cut-by-slashes">
+  <meta name="twitter:title" content="[LC] 959. Regions Cut By Slashes">
+  <meta name="twitter:description" content="https://leetcode.com/problems/regions-cut-by-slashes/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io//assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io//assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+  
+
+  <link href="https://moonjae.github.io//feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-light-a98c41efc5ed9fcc06ac664c9e2f7a9b3c3b2e0a52357d221fe382f6f4abc8fc.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-light-87d1f2a3a19b1500e5c1626a0492025ca5f7f97d24540dc5900288e92112925a.png">
+      <link rel="stylesheet" type="text/css" href="/assets/light-bb1553a18d0f1ccfe1aabc010584c49b4277a88503216b78906ba719e30019c1.css">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav scrollappear">
+  <a href="/" class="header-logo" title="Jae Moon">Jae Moon</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="/about" title="About me">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-about">
+  <use href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about" xlink:href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank" title="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-linkedin">
+  <use href="/assets/linkedin-cdc5c107044324a3dfbea2e9ead15873f8dee304c37d73a046988956b706256e.svg#icon-linkedin" xlink:href="/assets/linkedin-cdc5c107044324a3dfbea2e9ead15873f8dee304c37d73a046988956b706256e.svg#icon-linkedin"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article scrollappear">
+          <header class="article-header">
+            <h1>[LC] 959. Regions Cut By Slashes</h1>
+            <p>https://leetcode.com/problems/regions-cut-by-slashes/description/</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    December 16, 2022
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      4 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/union-find" title="See all posts with tag 'Union-Find'">Union-Find</a>
+    
+      
+      <a href="/tag/dfs" title="See all posts with tag 'DFS'">DFS</a>
+    
+      
+      <a href="/tag/bfs" title="See all posts with tag 'BFS'">BFS</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <h1 id="problem-statement">Problem Statement</h1>
+<p>An n x n grid is composed of 1 x 1 squares where each 1 x 1 square consists of a ‘/’, ‘', or blank space ‘ ‘. These characters divide the square into contiguous regions.
+Given the grid grid represented as a string array, return the number of regions.
+Note that backslash characters are escaped, so a ‘' is represented as ‘\’.</p>
+
+<p>Example 1:
+<img src="https://assets.leetcode.com/uploads/2018/12/15/1.png" alt="" />
+Input: grid = [” /”,”/ “]
+Output: 2</p>
+
+<h1 id="intuition">Intuition</h1>
+<ul>
+  <li>This problem can basically be understood as a disjoint set problem. The objective is to find how many disjoin sets there are.</li>
+  <li>The next problem we face is, how are we going to find all the disjoin sets. There are two possible ways to do this.
+    <ol>
+      <li>Union Find</li>
+    </ol>
+  </li>
+  <li>we should try to divide the squares into 4parts each 
+<img src="https://i.loli.net/2018/12/20/5c1b3cfd6c7b9.jpg" alt="" /></li>
+  <li>basically whenever we see ‘/’, 0 and 1 can be joined and 2 and 3 can be joined</li>
+  <li>when wee see ‘', 0 and 2 can be joined and 1 and 3 can be joined</li>
+  <li>when it is empty, all 4 parts can be joined togther</li>
+  <li>we also need to see if parts in the current square can be joined with parts from surrounding squares</li>
+</ul>
+
+<ol>
+  <li>DFS or BFS (finding number of islands)
+    <ul>
+      <li>in order to convert this into ‘finding number of islands’ problem, we can upscale the grid into [n * 3][n * 3] grid and then try to represent the crossing lines in the middle 
+<img src="https://assets.leetcode.com/users/votrubac/image_1544935075.png" alt="" /></li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="approach">Approach</h1>
+<p>Union find approach</p>
+<ol>
+  <li>iterate through each grid</li>
+  <li>check if grid is ‘/’ -&gt; (0,1) and (2,3) need to be joiend</li>
+  <li>check if grid is ‘' -&gt; (0, 2) and (1,3) need to be joined</li>
+  <li>also we need to join parts of the cur grid with parts from the surring squares
+    <ul>
+      <li>We don’t have to check for all 4 parts. Since we are iterating from left to right and top to bottom, we only need to join 0 with top’s 3 and 1 with left’s 2</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="code">Code</h1>
+
+<p>Union Find approach</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    vector&lt;int&gt; boss_list;
+    int cnt;
+    int get_boss(int sub) {
+        if (boss_list[sub] == sub) return sub;
+        return boss_list[sub] = get_boss(boss_list[sub]);
+    }
+    void join(int a, int b) {
+        int a_boss = get_boss(a);
+        int b_boss = get_boss(b);
+        if (a_boss == b_boss) return;
+        --cnt;
+        boss_list[a_boss] = b_boss;
+    }
+    int regionsBySlashes(vector&lt;string&gt;&amp; grid) {
+        int n = grid.size();
+        cnt = n * n * 4;
+        for (int i = 0; i &lt; cnt; ++i) boss_list.push_back(i);
+        for (int i = 0; i &lt; n; ++i) {
+            for (int j = 0; j &lt; n; ++j) {
+                int index = (i * n + j) * 4;
+                int a = index;
+                int b = index + 1;
+                int c = index + 2;
+                int d = index + 3;
+                if (grid[i][j] == '/') {
+                    join(a, b);
+                    join(c, d);
+                }
+                else if (grid[i][j] == '\\') {
+                    join(a, d);
+                    join(b, c);
+                }
+                else {
+                    join(a, b);
+                    join(b, c);
+                    join(c, d);
+                }
+                
+                // left
+                if (j != 0) {
+                    int left = (i * n + j - 1) * 4 + 2;
+                    join(left, a);
+                }
+                // top
+                if (i != 0) {
+                    int top = ((i - 1) * n + j) * 4 + 3;
+                    join(top, b);
+                }
+            }
+        }
+        
+        return cnt;
+    }
+</code></pre></div></div>
+
+<p>DFS approach</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int dfs(vector&lt;vector&lt;int&gt;&gt; &amp;g, int i, int j) {
+    if (min(i, j) &lt; 0 || max(i, j) &gt;= g.size() || g[i][j] != 0)
+        return 0;
+    g[i][j] = 1;
+    return 1 + dfs(g, i - 1, j) + dfs(g, i + 1, j) + dfs(g, i, j - 1) + dfs(g, i, j + 1);
+}
+int regionsBySlashes(vector&lt;string&gt;&amp; grid) {
+    int n = grid.size(), regions = 0;
+    vector&lt;vector&lt;int&gt;&gt; g(n * 3, vector&lt;int&gt;(n * 3, 0));
+    for (int i = 0; i &lt; n; ++i)
+        for (int j = 0; j &lt; n; ++j)
+            if (grid[i][j] == '/') 
+                g[i * 3][j * 3 + 2] = g[i * 3 + 1][j * 3 + 1] = g[i * 3 + 2][j * 3] = 1;
+            else if (grid[i][j] == '\\') 
+                g[i * 3][j * 3] = g[i * 3 + 1][j * 3 + 1] = g[i * 3 + 2][j * 3 + 2] = 1;
+    for (int i = 0; i &lt; n * 3; ++i)
+        for (int j = 0; j &lt; n * 3; ++j)
+            regions += dfs(g, i, j) ? 1 : 0;    
+    return regions;
+}
+</code></pre></div></div>
+
+<h1 id="take-away">Take Away</h1>
+<ul>
+  <li>First, always think about what kind of problem I need to solve. All the questions are worded differently but, a lot of them can be converted into easier problems.</li>
+</ul>
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=[LC]+959.+Regions+Cut+By+Slashes%20-%20https://moonjae.github.io//posts/lc-regions-cut-by-slashes" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://moonjae.github.io//posts/lc-regions-cut-by-slashes" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://chalk-1.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer scrollappear">
+  <p>
+  Hi! I am
+  <a href="/about" title="About me">Jae Moon</a>.
+</p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-28631876-6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-28631876-6');
+  </script>
+
+
+<script src="/assets/vendor-061d89160864b5ec5aa5148d6410ad4c21190c45402a81ffcf97a76715b05767.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+  <script src="/assets/scrollappear-e2da8ea567e418637e31266cc5302126eaa79f62a2273739086358b589a89ee6.js" type="text/javascript"></script>
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="nsnfLHRAA2-FGASGfBCEd3XnbtJDOYthzJ_vt2_qkJ8" />
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Jae Moon | [LC] 52. N-Queens II</title>
+  <meta name="description" content="https://leetcode.com/problems/n-queens-ii/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 52. N-Queens II">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io//posts/lc-n-queens-ii">
+  <meta property="og:description" content="https://leetcode.com/problems/n-queens-ii/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io//posts/lc-n-queens-ii">
+  <meta name="twitter:title" content="[LC] 52. N-Queens II">
+  <meta name="twitter:description" content="https://leetcode.com/problems/n-queens-ii/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io//assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io//assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+  
+
+  <link href="https://moonjae.github.io//feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-light-a98c41efc5ed9fcc06ac664c9e2f7a9b3c3b2e0a52357d221fe382f6f4abc8fc.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-light-87d1f2a3a19b1500e5c1626a0492025ca5f7f97d24540dc5900288e92112925a.png">
+      <link rel="stylesheet" type="text/css" href="/assets/light-bb1553a18d0f1ccfe1aabc010584c49b4277a88503216b78906ba719e30019c1.css">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav scrollappear">
+  <a href="/" class="header-logo" title="Jae Moon">Jae Moon</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="/about" title="About me">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-about">
+  <use href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about" xlink:href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank" title="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-linkedin">
+  <use href="/assets/linkedin-cdc5c107044324a3dfbea2e9ead15873f8dee304c37d73a046988956b706256e.svg#icon-linkedin" xlink:href="/assets/linkedin-cdc5c107044324a3dfbea2e9ead15873f8dee304c37d73a046988956b706256e.svg#icon-linkedin"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article scrollappear">
+          <header class="article-header">
+            <h1>[LC] 52. N-Queens II</h1>
+            <p>https://leetcode.com/problems/n-queens-ii/description/</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    December 2, 2022
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      3 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/backtracking" title="See all posts with tag 'Backtracking'">Backtracking</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <h1 id="problem-statement">Problem Statement</h1>
+<p>The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.</p>
+
+<p>Given an integer n, return the number of distinct solutions to the n-queens puzzle.</p>
+
+<p>Example 1:
+<img src="https://assets.leetcode.com/uploads/2020/11/13/queens.jpg" alt="" />
+Input: n = 4
+Output: 2
+Explanation: There are two distinct solutions to the 4-queens puzzle as shown.</p>
+
+<h1 id="intuition">Intuition</h1>
+<ul>
+  <li>Because we have to place N queens, we need to place at least one queen at each row. If we do not this, this will lead another row to have two queens which should be avoided</li>
+  <li>Using the information above we can use recursion to get all the possible combinations. Now we need to figure out how we know if a queen at the given row does not interfere with other queens in the previous rows</li>
+  <li>There are 3 ways a queen can advance; vertical, horizontal, diagonal. But using 1. we are making sure that none of other queens are on the same horizontal line.</li>
+  <li>To check vertical lines, we can just add a datastructure (vector/set) that keeps track of all the column values of queens that have already been placed</li>
+  <li>We are left with diagonal and antidiagonal.
+    <ul>
+      <li>For diagonal, let’s say a queen was placed in col 3 in the previous row and we are checking for col 2 for the current row. We can see that while row has increased, col has decreased. For it to create a diagonal line, the value of col + row needs to stay the same</li>
+      <li>For antidiagonal, we can see that as row increases, col also needs to increase by the same amount so the different between row and col stays the same</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="approach">Approach</h1>
+<ol>
+  <li>create datastructures to store col, diag, antidiag</li>
+  <li>cal recursion funtion which will return the count</li>
+</ol>
+
+<p>Recursion function</p>
+<ol>
+  <li>The recursion function will has the current row as its argument and it will return once it reaches n;</li>
+  <li>For the given row we need to check for each column
+    <ul>
+      <li>check column</li>
+      <li>check if row + col already exist in diag</li>
+      <li>check if row - col + n - 1(n - 1 used to avoid neg numbers) exist in antidiag</li>
+    </ul>
+  </li>
+  <li>If valid, update col, diag, antidiag and recur</li>
+  <li>After returning from recursion call, update col, diag, antidiag again to make them ready for next iteration</li>
+</ol>
+
+<h1 id="complexity">Complexity</h1>
+<ul>
+  <li>Time complexity: O(n ^ 2)</li>
+</ul>
+
+<h1 id="code">Code</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    int totalNQueens(int n) {
+        vector&lt;bool&gt; col(n), diag(2*n-1), anti_diag(2*n-1);
+        return solve(col, diag, anti_diag, 0);
+    }
+   
+    int solve(vector&lt;bool&gt;&amp; col, vector&lt;bool&gt;&amp; diag, vector&lt;bool&gt;&amp; anti_diag, int row) {
+        int n = size(col), count = 0;
+        if(row == n) return 1;
+        for(int column = 0; column &lt; n; column++)           
+            if(!col[column] &amp;&amp; !diag[row + column] &amp;&amp; !anti_diag[row - column + n - 1]){ 
+                col[column] = diag[row + column] = anti_diag[row - column + n - 1] = true;
+                count += solve(col, diag, anti_diag, row + 1); 
+                col[column] = diag[row + column] = anti_diag[row - column + n - 1] = false; 
+            }                                
+        return count;
+    }
+</code></pre></div></div>
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=[LC]+52.+N-Queens+II%20-%20https://moonjae.github.io//posts/lc-n-queens-ii" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://moonjae.github.io//posts/lc-n-queens-ii" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://chalk-1.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer scrollappear">
+  <p>
+  Hi! I am
+  <a href="/about" title="About me">Jae Moon</a>.
+</p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-28631876-6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-28631876-6');
+  </script>
+
+
+<script src="/assets/vendor-061d89160864b5ec5aa5148d6410ad4c21190c45402a81ffcf97a76715b05767.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+  <script src="/assets/scrollappear-e2da8ea567e418637e31266cc5302126eaa79f62a2273739086358b589a89ee6.js" type="text/javascript"></script>
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+</body>
+</html>

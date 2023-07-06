@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="nsnfLHRAA2-FGASGfBCEd3XnbtJDOYthzJ_vt2_qkJ8" />
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Jae Moon | [CPP] Const in C++</title>
+  <meta name="description" content="Const in C++">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CPP] Const in C++">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io//posts/cpp-const-in-cpp">
+  <meta property="og:description" content="Const in C++">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io//posts/cpp-const-in-cpp">
+  <meta name="twitter:title" content="[CPP] Const in C++">
+  <meta name="twitter:description" content="Const in C++">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io//assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io//assets/og-image-ee46bbc61b334e821e81534b1fd43f3fee6f020ec174b3c2114445695fd48c01.jpg">
+  
+
+  <link href="https://moonjae.github.io//feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  
+
+  
+
+    
+      <link rel="icon" type="image/x-icon" href="/assets/favicon-light-a98c41efc5ed9fcc06ac664c9e2f7a9b3c3b2e0a52357d221fe382f6f4abc8fc.ico">
+      <link rel="apple-touch-icon" href="/assets/apple-touch-icon-light-87d1f2a3a19b1500e5c1626a0492025ca5f7f97d24540dc5900288e92112925a.png">
+      <link rel="stylesheet" type="text/css" href="/assets/light-bb1553a18d0f1ccfe1aabc010584c49b4277a88503216b78906ba719e30019c1.css">
+    
+
+  
+
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav scrollappear">
+  <a href="/" class="header-logo" title="Jae Moon">Jae Moon</a>
+  <ul class="header-links">
+    
+      <li>
+        <a href="/about" title="About me">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-about">
+  <use href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about" xlink:href="/assets/about-ecf154b571ab8034ae00aeed91a3b7ad68db80b46d958753ad6216c919486e88.svg#icon-about"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank" title="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-linkedin">
+  <use href="/assets/linkedin-cdc5c107044324a3dfbea2e9ead15873f8dee304c37d73a046988956b706256e.svg#icon-linkedin" xlink:href="/assets/linkedin-cdc5c107044324a3dfbea2e9ead15873f8dee304c37d73a046988956b706256e.svg#icon-linkedin"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <li>
+        <a href="/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon-rss">
+  <use href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss" xlink:href="/assets/rss-541ec5cea9cefd10d2fcfec01888f3f231a8829940249835fa7b7b3a12ae0d0d.svg#icon-rss"></use>
+</svg>
+
+        </a>
+      </li>
+    
+    
+  </ul>
+</nav>
+
+
+
+        <article class="article scrollappear">
+          <header class="article-header">
+            <h1>[CPP] Const in C++</h1>
+            <p>Const in C++</p>
+            <div class="article-list-footer">
+  <span class="article-list-date">
+    January 25, 2023
+  </span>
+  <span class="article-list-divider">-</span>
+  <span class="article-list-minutes">
+    
+    
+      2 minute read
+    
+  </span>
+  <span class="article-list-divider">-</span>
+  <div class="article-list-tags">
+    
+      
+      <a href="/tag/cpp" title="See all posts with tag 'CPP'">CPP</a>
+    
+  </div>
+</div>
+          </header>
+
+          <div class="article-content">
+            <h1 id="const">Const</h1>
+<h3 id="what-does-const-mean">What does const mean</h3>
+<ul>
+  <li>Const keywords basically suggests that the variables associated with that keyword are intended for read-only access</li>
+  <li>This implies that const is different from immutability because immutability means that the variables can never be changed while const variables are intended for read access.</li>
+  <li>ex) const int a = b Basically ‘a’ cannot be used to modify its value ‘b’</li>
+</ul>
+
+<p>Here we can see, variable ‘a’ which is declared as const, is actually modified</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const int a = 3;
+const int * b = &amp;a;
+*const_cast&lt;int*&gt;b = 4; 
+</code></pre></div></div>
+
+<p>A pointer-to-const can point to a non-const object. What the pointer-to-const tells us is that we can’t use ‘b’ to modify the value of ‘a’</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int a = 3;
+const int * b = &amp;a;
+*const_cast&lt;int*&gt;b = 4; 
+</code></pre></div></div>
+
+<p>Below is considered illegal because the compiler does not allow you to create a non-const-pointer pointing to a const object since ‘a’ cannot be dereferenced and pointed by a non-const-pointer</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const int a = 3; 
+int * b = &amp;a; // illegal 
+</code></pre></div></div>
+
+<h3 id="pointer-to-const-object-vs-const-pointer-to-object">pointer-to-const-object vs const-pointer-to-object</h3>
+<ul>
+  <li>try to read from right to left</li>
+  <li>const int * a (pointer-to-const-object)
+    <ul>
+      <li>What the pointer is pointing to a read-only but it can be replaced to another pointer</li>
+    </ul>
+  </li>
+  <li>int * const a (const-pointer-to-object)
+    <ul>
+      <li>The value can be modified but the pointer cannot be replaced with another pointer</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="const-inside-class">Const inside class</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Test{
+    public:
+    int a;
+    void helper() { cout &lt;&lt; a; }
+};
+
+Test a = {1};
+a.helper(); // legal
+
+const Test b = {1};
+b.helper(); // illegal because the helper function can modify the member variables 
+</code></pre></div></div>
+
+<p>Therefore for cases above we need add const keywords to methods in order to represent that we do not intend to modify any member variables</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void helper() const { cout &lt;&lt; a; }
+</code></pre></div></div>
+
+<p>However there can be situations where we do need to modify one or more variables in that case we can use mutable keyword to the member variable we wish to modify</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mutable int a; 
+</code></pre></div></div>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>Const: https://www.youtube.com/watch?v=4fJBrditnJU&amp;list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&amp;index=33</li>
+  <li>Mutable: https://www.youtube.com/watch?v=bP9z3H3cVMY&amp;list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&amp;index=35&amp;t=279s</li>
+  <li>immutability and const: https://softwareengineering.stackexchange.com/questions/149555/difference-between-immutable-and-const</li>
+  <li>https://stackoverflow.com/questions/13061450/pointer-to-const-can-point-to-non-const-object-language-design-or-technical-re</li>
+</ul>
+
+          </div>
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=[CPP]+Const+in+C++%20-%20https://moonjae.github.io//posts/cpp-const-in-cpp" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://moonjae.github.io//posts/cpp-const-in-cpp" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://chalk-1.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer scrollappear">
+  <p>
+  Hi! I am
+  <a href="/about" title="About me">Jae Moon</a>.
+</p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-28631876-6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-28631876-6');
+  </script>
+
+
+<script src="/assets/vendor-061d89160864b5ec5aa5148d6410ad4c21190c45402a81ffcf97a76715b05767.js" type="text/javascript"></script>
+
+
+  <script src="/assets/webfonts-96493456d319d1bf419afdf8701552d4d486fee6afd304897d4fd81eb4e0cc0b.js" type="text/javascript"></script>
+
+
+
+  <script src="/assets/scrollappear-e2da8ea567e418637e31266cc5302126eaa79f62a2273739086358b589a89ee6.js" type="text/javascript"></script>
+
+
+<script src="/assets/application-cfde13ac81ddaf4351b2e739603e2baf688d0fcc9aba613fe62bbb1c7b037fb9.js" type="text/javascript"></script>
+
+
+</body>
+</html>

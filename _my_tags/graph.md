@@ -1,4 +1,0 @@
----
-slug: graph
-name: Graph
----

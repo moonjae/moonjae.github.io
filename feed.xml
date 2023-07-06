@@ -1,20 +1,90 @@
----
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="https://www.w3.org/2005/Atom" xmlns:dc="https://purl.org/dc/elements/1.1/">
   <channel>
-    <title>{{ site.name | xml_escape }}</title>
-    <description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ page.path | absolute_url }}" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>Jae Moon</title>
+    <description></description>
+    <link>https://moonjae.github.io/</link>
+    <atom:link href="https://moonjae.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.description | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | absolute_url }}</link>
-        <guid isPermaLink="true">{{ post.url | absolute_url }}</guid>
+        <title>[LC] 818. Race Car</title>
+        <description>https://leetcode.com/problems/race-car</description>
+        <pubDate>Wed, 05 Jul 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/lc-race-car</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/lc-race-car</guid>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>[CSES] Flight Discount</title>
+        <description>https://cses.fi/problemset/task/1195</description>
+        <pubDate>Mon, 03 Jul 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/cses-flight-discount</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/cses-flight-discount</guid>
+      </item>
+    
+      <item>
+        <title>[CSES] Stick Lengths</title>
+        <description>https://cses.fi/problemset/task/1074</description>
+        <pubDate>Thu, 22 Jun 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/cses-stick-lengths</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/cses-stick-lengths</guid>
+      </item>
+    
+      <item>
+        <title>[CSES] Missing Coin Sum</title>
+        <description>https://cses.fi/problemset/task/2183/</description>
+        <pubDate>Thu, 22 Jun 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/cses-missing-coin-sum</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/cses-missing-coin-sum</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Max Flow Algorithm</title>
+        <description>Max Flow Algorithm / Ford-Fulkerson</description>
+        <pubDate>Mon, 05 Jun 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/algo-ds-max-flow-algorithm</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/algo-ds-max-flow-algorithm</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Eulerian Path/Cycle</title>
+        <description>Eulerian Path/Cycle</description>
+        <pubDate>Sun, 21 May 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/algo-ds-eulerian-path-cycle</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/algo-ds-eulerian-path-cycle</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Dijkstra vs Prims</title>
+        <description>Dijkstra vs Prims</description>
+        <pubDate>Wed, 17 May 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/algo-ds-dijkstra-vs-prims</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/algo-ds-dijkstra-vs-prims</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Dijkstra and Bellman-Ford</title>
+        <description>Dijkstra and Bellman-ford</description>
+        <pubDate>Wed, 17 May 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/algo-ds-dijkstra-and-bellmanford</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/algo-ds-dijkstra-and-bellmanford</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Monotonic Stack</title>
+        <description>Monotonic Stack</description>
+        <pubDate>Mon, 15 May 2023 00:00:00 -0400</pubDate>
+        <link>https://moonjae.github.io//posts/algo-ds-monotonic-stack</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/algo-ds-monotonic-stack</guid>
+      </item>
+    
+      <item>
+        <title>[Math] How to check if two lines intersect</title>
+        <description>How to check if two lines intersect</description>
+        <pubDate>Sat, 04 Feb 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io//posts/math-how-to-check-if-two-lines-intersect</link>
+        <guid isPermaLink="true">https://moonjae.github.io//posts/math-how-to-check-if-two-lines-intersect</guid>
+      </item>
+    
   </channel>
 </rss>

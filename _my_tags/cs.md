@@ -1,4 +1,0 @@
----
-slug: cs
-name: CS
----

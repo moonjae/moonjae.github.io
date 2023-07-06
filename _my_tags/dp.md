@@ -1,4 +1,0 @@
----
-slug: dp
-name: DP
----
