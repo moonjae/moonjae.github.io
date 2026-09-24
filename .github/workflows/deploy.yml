@@ -2,9 +2,10 @@
 # Build the site and publish it to the gh-pages branch, which GitHub Pages serves.
 #
 # jekyll-assets is not a plugin GitHub Pages can run itself, so every change on
-# master (including edits made through Pages CMS) is built here. The job runs in
-# the jekyll/jekyll:3.8 image so it uses the same Ruby and gems as a local
-# Docker build.
+# master (including edits made through Pages CMS) is built here. The build runs
+# in the jekyll/jekyll:3.8 image via docker run, so it uses the same Ruby and
+# gems as a local Docker build. The image is too old to host GitHub's JavaScript
+# actions directly, which is why it is not used as the job container.
 
 name: Deploy site
 
@@ -23,32 +24,29 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    container:
-      image: jekyll/jekyll:3.8
-    env:
-      JEKYLL_ENV: production
-      BUNDLE_PATH: vendor/bundle
     steps:
-      - name: Install git
-        run: apk add --no-cache git
-
       - name: Check out
         uses: actions/checkout@v4
 
       - name: Cache gems
         uses: actions/cache@v4
         with:
-          path: vendor/bundle
+          path: .bundle-cache
           key: gems-${{ hashFiles('Gemfile.lock') }}
 
-      - name: Install gems
-        run: bundle install --jobs 4
-
-      - name: Install JavaScript dependencies
-        run: yarn install --modules-folder ./_assets/yarn --non-interactive
-
-      - name: Build
-        run: bundle exec jekyll build --trace
+      - name: Build in the Jekyll 3.8 image
+        run: |
+          mkdir -p .bundle-cache _assets/yarn _site
+          docker run --rm \
+            -v "$PWD:/srv/jekyll" \
+            -v "$PWD/.bundle-cache:/srv/bundle" \
+            -e JEKYLL_UID="$(id -u)" -e JEKYLL_GID="$(id -g)" \
+            -e BUNDLE_PATH=/srv/bundle \
+            -e JEKYLL_ENV=production \
+            jekyll/jekyll:3.8 \
+            sh -c 'bundle install --jobs 4 \
+              && yarn install --modules-folder ./_assets/yarn --non-interactive \
+              && bundle exec jekyll build --trace'
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
