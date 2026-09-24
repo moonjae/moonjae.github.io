@@ -45,11 +45,4 @@
     new Zooming({ customSize: '100%', scaleBase: 0.9, scaleExtra: 0 }).listen('.zooming');
   }
 
-  // Share links open in a small popup.
-  Array.prototype.forEach.call(document.querySelectorAll('.article-share a'), function (link) {
-    link.addEventListener('click', function (event) {
-      event.preventDefault();
-      window.open(link.getAttribute('href'), 'Share', 'width=600,height=400,noopener');
-    });
-  });
 })();

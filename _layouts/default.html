@@ -3,7 +3,7 @@
 {% include head.html %}
 <body>
   <div class="paper-grain" aria-hidden="true"></div>
-  {% unless page.hide_nav %}
+  {% unless page.hide_nav or page.layout == "post" %}
     {% include navigation.html %}
   {% endunless %}
   <main>

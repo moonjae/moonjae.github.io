@@ -2,58 +2,46 @@
 layout: default
 ---
 
+<!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="{{ '/' | relative_url }}" class="post-header-home invert-hover">
+    <span>{{ site.name }}</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  {% for tag in page.tags %}
+    <a href="{{ '/' | relative_url }}#tag={{ tag }}" class="post-header-tag invert-hover" title="See all posts tagged {% include tag-name.html tag=tag %}">
+      <span class="tag">{% include tag-name.html tag=tag %}</span>
+    </a>
+  {% endfor %}
+</header>
+
 <article class="article">
-  <header class="article-header">
-    {% if page.tags.size > 0 %}
-      <p class="article-tags">
-        {% for tag in page.tags %}
-          <a class="tag" href="{{ 'tag/' | relative_url }}{{ tag }}" title="See all posts tagged {% include tag-name.html tag=tag %}">{% include tag-name.html tag=tag %}</a>
-        {% endfor %}
-      </p>
-    {% endif %}
-    <h1 class="article-title">{{ page.title }}</h1>
-    {% if page.description %}
+  <p class="article-meta">{{ page.date | date: "%Y.%m.%d" }} · {% include reading-time.html post=page %} min</p>
+  <h1 class="article-title">{{ page.title }}</h1>
+  {% if page.description %}
+    {% if page.description contains '://' %}
+      <p class="article-description"><a href="{{ page.description }}" rel="noreferrer noopener" target="_blank">{{ page.description }}</a></p>
+    {% else %}
       <p class="article-description">{{ page.description }}</p>
     {% endif %}
-    <p class="article-meta">{{ page.date | date: "%Y.%m.%d" }} · {% include reading-time.html post=page %} min</p>
-  </header>
+  {% endif %}
 
-  <div class="article-layout">
-    <div class="article-main">
-      <div class="article-content">
-        {{ content }}
-      </div>
-    </div>
-
-    <aside class="article-side">
-      <div class="article-side-block">
-        <div class="label">Published</div>
-        <p>{{ page.date | date: "%Y.%m.%d" }}</p>
-      </div>
-      <div class="article-side-block">
-        <div class="label">Share</div>
-        {% assign page_title = page.title | cgi_escape | truncate: 110 %}
-        {% capture twitter-share-text %}{{ page_title }} - {{ page.url | absolute_url }}{% if site.social.twitter %} by @{{ site.social.twitter }}{% endif %}{% endcapture %}
-        <ul class="article-share">
-          <li><a href="https://twitter.com/intent/tweet?text={{ twitter-share-text | uri_escape }}" rel="noreferrer noopener" target="_blank">Twitter</a></li>
-          <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absolute_url }}" rel="noreferrer noopener" target="_blank">Facebook</a></li>
-        </ul>
-      </div>
-      {% if page.previous or page.next %}
-        <div class="article-side-block">
-          <div class="label">More</div>
-          <ul class="article-adjacent">
-            {% if page.next %}
-              <li><span class="label">Newer</span><a href="{{ page.next.url | relative_url }}">{{ page.next.title }}</a></li>
-            {% endif %}
-            {% if page.previous %}
-              <li><span class="label">Older</span><a href="{{ page.previous.url | relative_url }}">{{ page.previous.title }}</a></li>
-            {% endif %}
-          </ul>
-        </div>
-      {% endif %}
-    </aside>
+  <div class="prose">
+    {{ content }}
   </div>
+
+  {% if page.previous or page.next %}
+    <nav class="article-nav" aria-label="Adjacent posts">
+      {% if page.previous %}
+        <a href="{{ page.previous.url | relative_url }}" title="{{ page.previous.title }}">&larr; Older</a>
+      {% else %}
+        <span></span>
+      {% endif %}
+      {% if page.next %}
+        <a href="{{ page.next.url | relative_url }}" title="{{ page.next.title }}">Newer &rarr;</a>
+      {% endif %}
+    </nav>
+  {% endif %}
 
   {% if site.discus_identifier %}
     <div class="article-comments">

@@ -1,16 +1,13 @@
 // =============================================================================
-// Highlights
+// Highlights (Rouge)
 // =============================================================================
 
+// Rouge wraps code in .highlighter-rouge > .highlight > pre. The pre carries
+// the border and padding (see .prose pre), so the wrappers stay unstyled.
+
 .highlight {
-  padding: 20px;
-  margin: 0 0 28px;
-  overflow: auto;
-  font-family: $font-mono;
-  font-size: 13px;
-  line-height: 1.6;
+  margin: 0 0 1.5em;
   background: $newsprint;
-  border: 1px solid $ink;
   pre {
     margin: 0;
   }

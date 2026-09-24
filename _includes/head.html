@@ -5,7 +5,7 @@
   {% if page.url == "/" %}
     <title>{{ site.name }}</title>
   {% else %}
-    <title>{{ page_title }} · {{ site.name }}</title>
+    <title>{{ page_title }} — {{ site.name }}</title>
   {% endif %}
   {% assign page_description = page.description | default: site.description %}
   <meta name="description" content="{{ page_description | strip_html | strip_newlines | escape }}">
