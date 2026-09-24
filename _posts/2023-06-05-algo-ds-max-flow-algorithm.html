@@ -1,0 +1,60 @@
+---
+layout: post
+title: "[ALGO][DS] Max Flow Algorithm"
+description: "Max Flow Algorithm / Ford-Fulkerson"
+tags: [algo, ds]
+---
+<h1 id="definition">Definition</h1>
+<p>The maximum flow problem involves determining the maximum amount of flow that can be sent from a source vertex to a sink vertex in a directed weighted graph, subject to capacity constraints on the edges.</p>
+
+<h1 id="ford-fulkerson">Ford-Fulkerson</h1>
+<ol>
+  <li>Start with initial flow as 0.</li>
+  <li>While there exists an augmenting path from the source to the sink:
+    <ul>
+      <li>Find an augmenting path using any path-finding algorithm, such as breadth-first search or depth-first search.</li>
+      <li>Determine the amount of flow that can be sent along the augmenting path, which is the minimum residual capacity along the edges of the path.</li>
+      <li>Increase the flow along the augmenting path by the determined amount.</li>
+    </ul>
+  </li>
+  <li>Return the maximum flow.</li>
+</ol>
+
+<h1 id="template">Template</h1>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">capacity</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">flow</span><span class="p">;</span>
+<span class="n">unordered_set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">visited</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">cur</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sink</span><span class="p">,</span> <span class="kt">int</span> <span class="n">min_val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cur</span> <span class="o">==</span> <span class="n">sink</span><span class="p">)</span> <span class="k">return</span> <span class="n">min_val</span><span class="p">;</span>
+    <span class="n">visited</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">cur</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">flow</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">capacity</span><span class="p">[</span><span class="n">cur</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">flow</span><span class="p">[</span><span class="n">cur</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">left</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">visited</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="n">visited</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kt">int</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">min_val</span><span class="p">,</span> <span class="n">left</span><span class="p">)))</span> <span class="p">{</span>
+<span class="n">flow</span><span class="p">[</span><span class="n">cur</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sent</span><span class="p">;</span>
+<span class="n">flow</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">cur</span><span class="p">]</span> <span class="o">-=</span> <span class="n">sent</span><span class="p">;</span>
+<span class="k">return</span> <span class="n">sent</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="n">fordFulkerson</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">max_flow</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    
+    <span class="k">while</span> <span class="p">(</span><span class="kt">int</span> <span class="n">sent</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">max_flow</span> <span class="o">+=</span> <span class="n">sent</span><span class="p">;</span>
+        <span class="n">visited</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">max_flow</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="source">Source</h1>
+<ul>
+  <li>https://stackoverflow.com/questions/19453217/why-are-back-edges-required-in-the-ford-fulkerson-algorithm</li>
+  <li>https://www.youtube.com/watch?v=LdOnanfc5TM</li>
+</ul>

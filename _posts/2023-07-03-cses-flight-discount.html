@@ -1,0 +1,142 @@
+---
+layout: post
+title: "[CSES] Flight Discount"
+description: "https://cses.fi/problemset/task/1195"
+tags: [graph]
+---
+<h1 id="problem-statement">Problem Statement</h1>
+<p>Your task is to find a minimum-price flight route from Syrjälä to Metsälä. You have one discount coupon, using which you can halve the price of any single flight during the route. However, you can only use the coupon once.</p>
+
+<h1 id="intuition">Intuition</h1>
+<p>This is a shortest path problem so we can use Dijkstra. However, we need to figure out how to take account of the discount. There are two ways to solve this problem</p>
+
+<p>Solution 1.</p>
+<ol>
+  <li>get min cost from src to all the other nodes (v1)</li>
+  <li>get min cost from dst to all the other nodes (v2)</li>
+  <li>iterate through all the nodes (A)
+    <ul>
+      <li>iterate through neighors (B)</li>
+      <li>we need to see if applying discount on this (A - B) can create min cost</li>
+      <li>v1[A] + (AB) + v2[B]</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Solution 2.</p>
+<ol>
+  <li>Use a separate space to take store min cost when discount is applied</li>
+</ol>
+
+<h1 id="code">Code</h1>
+<p>Solution 1</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+<span class="k">struct</span> <span class="nc">Node</span><span class="p">{</span>
+    <span class="n">ll</span> <span class="n">node</span><span class="p">,</span> <span class="n">val</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+<span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span> <span class="n">adj</span><span class="p">;</span>
+<span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span> <span class="n">rev_adj</span><span class="p">;</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;&amp;</span> <span class="n">neighbors</span><span class="p">,</span> <span class="kt">int</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">LLONG_MAX</span><span class="p">);</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">src</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">src</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">node</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">Node</span><span class="o">&amp;</span> <span class="n">nei</span><span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">node</span><span class="p">])</span> <span class="p">{</span>
+<span class="n">ll</span> <span class="n">new_cost</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span> <span class="o">+</span> <span class="n">nei</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">new_cost</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">[</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span> <span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">,</span> <span class="n">new_cost</span> <span class="p">});</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">v</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">ll</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t1</span> <span class="o">&gt;&gt;</span> <span class="n">t2</span> <span class="o">&gt;&gt;</span> <span class="n">t3</span><span class="p">;</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">t1</span><span class="p">].</span><span class="n">push_back</span><span class="p">({</span><span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">});</span>
+        <span class="n">rev_adj</span><span class="p">[</span><span class="n">t2</span><span class="p">].</span><span class="n">push_back</span><span class="p">({</span><span class="n">t1</span><span class="p">,</span> <span class="n">t3</span><span class="p">});</span>
+    <span class="p">}</span>
+    
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">forward</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span> <span class="n">reverse</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">rev_adj</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="n">ll</span> <span class="n">min_cost</span> <span class="o">=</span> <span class="n">LLONG_MAX</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">Node</span><span class="o">&amp;</span> <span class="n">nei</span><span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+<span class="n">ll</span> <span class="n">cand</span> <span class="o">=</span> <span class="n">forward</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">reverse</span><span class="p">[</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="n">nei</span><span class="p">.</span><span class="n">val</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">min_cost</span> <span class="o">&gt;</span> <span class="n">cand</span><span class="p">)</span> <span class="n">min_cost</span> <span class="o">=</span> <span class="n">cand</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">min_cost</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Solution 2</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span><span class="p">;</span>
+<span class="k">struct</span> <span class="nc">Node</span><span class="p">{</span>
+    <span class="n">ll</span> <span class="n">node</span><span class="p">,</span> <span class="n">val</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+<span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">ll</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;&gt;</span> <span class="n">adj</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="n">dijkstra</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 0 x included</span>
+    <span class="c1">// 1 included</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">ll</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">LLONG_MAX</span><span class="p">));</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">type</span><span class="p">][</span><span class="n">node</span><span class="p">.</span><span class="n">node</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">Node</span><span class="o">&amp;</span> <span class="n">nei</span><span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">node</span><span class="p">])</span> <span class="p">{</span>
+<span class="c1">// if cur is x included, we can try to include this time</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ll</span> <span class="n">cand</span> <span class="o">=</span> <span class="n">nei</span><span class="p">.</span><span class="n">val</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cand</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">])</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">cand</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span> <span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">,</span> <span class="n">cand</span><span class="p">,</span> <span class="mi">1</span> <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="n">ll</span> <span class="n">cand</span> <span class="o">=</span> <span class="n">nei</span><span class="p">.</span><span class="n">val</span> <span class="o">+</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cand</span> <span class="o">&lt;</span> <span class="n">v</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">type</span><span class="p">][</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">type</span><span class="p">][</span><span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">cand</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span> <span class="n">nei</span><span class="p">.</span><span class="n">node</span><span class="p">,</span> <span class="n">cand</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">type</span> <span class="p">});</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">ll</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t1</span> <span class="o">&gt;&gt;</span> <span class="n">t2</span> <span class="o">&gt;&gt;</span> <span class="n">t3</span><span class="p">;</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">t1</span><span class="p">].</span><span class="n">push_back</span><span class="p">({</span><span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="n">dijkstra</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>

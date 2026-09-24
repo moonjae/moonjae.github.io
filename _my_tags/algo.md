@@ -1,0 +1,4 @@
+---
+slug: algo
+name: Algo
+---

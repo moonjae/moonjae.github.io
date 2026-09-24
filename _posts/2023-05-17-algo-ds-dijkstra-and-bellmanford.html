@@ -1,0 +1,65 @@
+---
+layout: post
+title: "[ALGO][DS] Dijkstra and Bellman-Ford"
+description: "Dijkstra and Bellman-ford"
+tags: [algo, ds]
+---
+<h1 id="similarities-and-differences">Similarities and Differences</h1>
+<p>Similarities</p>
+<ul>
+  <li>They are both used to find a solution shortest path from a single source problem</li>
+  <li>They both use “edge relaxation”; an operation to find lower cost to reach vertex</li>
+</ul>
+
+<p>Differences</p>
+<ul>
+  <li>D - greedy B - DP</li>
+  <li>D - works only on pos values B - work on neg values too</li>
+  <li>B is able to detect negative cycle</li>
+</ul>
+
+<h1 id="template">Template</h1>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">dijkstra</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">src</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dst</span><span class="p">,</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;&amp;</span> <span class="n">adj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">);</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">src</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">src</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        
+        <span class="c1">// - cur[1] represents the min cost to reach cur[0]</span>
+        <span class="c1">// - there cannot be a cost that is smaller than current cost</span>
+        <span class="c1">// later in the loop</span>
+        <span class="c1">// - you can technically check if c[0] == dst and return here</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">neighbor</span><span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]]});</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">cost</span><span class="p">[</span><span class="n">dst</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">bellmanFord</span><span class="p">(</span><span class="kt">int</span> <span class="n">V</span><span class="p">,</span> <span class="kt">int</span> <span class="n">src</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">);</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">src</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">V</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">edge</span><span class="o">:</span> <span class="n">edges</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">int</span> <span class="n">source</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">destination</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">==</span> <span class="n">INT_MAX</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+<span class="c1">// to check to see what happens after each iteration of i</span>
+<span class="c1">// we need to create a temporary vector if not it will not strictly</span>
+<span class="c1">// show you values after ith iteration; could show i+ th iteration</span>
+<span class="kt">int</span> <span class="n">new_cost</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">cost</span><span class="p">[</span><span class="n">source</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">destination</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">new_cost</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">destination</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span><span class="p">;</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// you can do an extra loop here to check for negative cycle</span>
+<span class="p">}</span>
+</code></pre></div></div>
