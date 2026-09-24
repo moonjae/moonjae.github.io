@@ -1,0 +1,2 @@
+{%- assign words = include.post.content | number_of_words -%}
+{{- words | plus: 249 | divided_by: 250 | at_least: 1 -}}

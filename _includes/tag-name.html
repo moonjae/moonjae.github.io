@@ -1,0 +1,2 @@
+{%- assign tag_name = site.my_tags | where: "slug", include.tag | map: "name" | first -%}
+{%- if tag_name -%}{{ tag_name }}{%- else -%}{{ include.tag | replace: "-", " " | capitalize }}{%- endif -%}

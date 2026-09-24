@@ -1,0 +1,8 @@
+<li class="post-row" data-tags="{{ include.post.tags | join: ' ' }}">
+  <a href="{{ include.post.url | relative_url }}" class="post-link invert-hover">
+    <span class="post-date">{{ include.post.date | date: "%Y.%m.%d" }}</span>
+    <span class="post-title">{{ include.post.title }}</span>
+    <span class="post-tags">{% for tag in include.post.tags %}<span class="tag">{% include tag-name.html tag=tag %}</span> {% endfor %}</span>
+    <span class="post-minutes">{% include reading-time.html post=include.post %} min</span>
+  </a>
+</li>

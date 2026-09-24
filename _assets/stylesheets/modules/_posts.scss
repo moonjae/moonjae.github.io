@@ -1,0 +1,82 @@
+// =============================================================================
+// Post list: one row per post
+// =============================================================================
+
+.posts {
+  border-bottom: 1px solid $ink;
+}
+
+.post-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  > li + li {
+    border-top: 1px solid $ink;
+  }
+}
+
+.post-row[hidden] {
+  display: none;
+}
+
+.post-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px $gutter;
+  @include from($bp-md) {
+    flex-direction: row;
+    gap: 24px;
+    align-items: baseline;
+    padding: 20px $gutter-md;
+  }
+}
+
+.post-date,
+.post-tags,
+.post-minutes {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.post-date {
+  @include from($bp-md) {
+    width: 112px;
+  }
+}
+
+.post-title {
+  flex: 1;
+  font-family: $font-serif;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.post-minutes {
+  @include from($bp-md) {
+    width: 56px;
+    text-align: right;
+  }
+}
+
+.posts-empty {
+  @include meta;
+  padding: 20px $gutter;
+  @include from($bp-md) {
+    padding: 20px $gutter-md;
+  }
+}
+
+// Grouped lists (tags page)
+
+.posts-group-title {
+  @include label;
+  padding: 12px $gutter;
+  border-bottom: 1px solid $ink;
+  @include from($bp-md) {
+    padding: 12px $gutter-md;
+  }
+  .post-list + & {
+    border-top: 1px solid $ink;
+  }
+}

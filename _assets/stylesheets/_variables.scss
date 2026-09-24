@@ -2,46 +2,32 @@
 // Variables
 // =============================================================================
 
-// Typography
-// =============================================================================
-
-$sans-serif: "Lato", Helvetica, Arial, sans-serif;
-$serif: "Cormorant Garamond", Courier, serif;
-$base-font-family: $sans-serif;
-$base-font-weight: 400;
-$base-font-weight-bold: 700;
-
 // Colors
 // =============================================================================
 
-// Brand colors
+$newsprint: #fbfbfd;
+$ink: #302e33;
+$mid: #57555a;
 
-$brand-success: #1fbf92;
-$brand-danger: #e74b3c;
-$brand-primary: #3449ed;
-$brand-warning: #f1c90b;
-
-// Sizes
+// Typography
 // =============================================================================
 
-// Grid
-
-$columns: 12;
-$max-width: 650px;
-$gutter: 20px;
-$one-column: 100% / $columns;
-$negative-gutter: 0 - $gutter;
-
-// Font sizes
+$font-display: "Amiri", Georgia, serif;
+$font-mono: "Space Mono", "Courier New", Courier, monospace;
+$font-serif: "EB Garamond", Georgia, serif;
 
 $base-font-size: 16px;
-$base-line-height: 1.8;
 
-// Box sizes
-
-$base-border-radius: 4px;
-
-// Effects
+// Breakpoints (min-width, mobile first)
 // =============================================================================
 
-$base-transition-speed: .2s;
+$bp-md: 768px;
+$bp-lg: 1024px;
+
+// Spacing
+// =============================================================================
+
+$gutter: 16px;       // px-4
+$gutter-md: 24px;    // md:px-6
+$block: 24px;        // p-6
+$block-md: 40px;     // md:p-10

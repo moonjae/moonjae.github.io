@@ -2,18 +2,41 @@
 // Tags
 // =============================================================================
 
-.tags-page-header {
-  margin-top: 0px;
+.tag {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: $font-mono;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border: 1px solid $ink;
 }
 
-.tags-page {
-  text-align: center;
-  padding: 50px 0;
-  h1 {
-    margin: 0 0 15px 0;
+.tag-btn {
+  cursor: pointer;
+  &.is-active,
+  &:hover {
+    color: $newsprint;
+    background: $ink;
   }
 }
 
-.tag-cloud {
-  text-decoration: none;
+.tag-count {
+  opacity: .6;
+}
+
+// Strip of tag buttons below the hero (and on the tags page).
+
+.tag-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px $gutter;
+  font-size: 12px;
+  border-bottom: 1px solid $ink;
+  @include from($bp-md) {
+    padding: 12px $gutter-md;
+  }
 }

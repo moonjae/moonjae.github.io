@@ -2,15 +2,14 @@
 <html lang="en">
 {% include head.html %}
 <body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  {% unless page.hide_nav %}
+    {% include navigation.html %}
+  {% endunless %}
   <main>
-    <div class="grid grid-centered">
-      <div class="grid-cell">
-        {% include navigation.html %}
-        {{ content }}
-        {% include footer.html %}
-      </div>
-    </div>
+    {{ content }}
   </main>
+  {% include footer.html %}
   {% include javascripts.html %}
 </body>
 </html>

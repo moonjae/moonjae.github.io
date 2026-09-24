@@ -3,15 +3,42 @@
 // =============================================================================
 
 .footer {
-  display: block;
-  padding-top: 35px;
-  margin-bottom: 85px;
-  border-top: 1px solid $base-border-color;
-  p {
-    font-size: 15px;
-    color: $gray-light;
+  @include meta;
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid $ink;
+  @include from($bp-md) {
+    grid-template-columns: 1fr 1fr;
   }
-  a {
-    text-decoration: none;
+}
+
+.footer-col {
+  padding: $block;
+  &:first-child {
+    border-bottom: 1px solid $ink;
+    @include from($bp-md) {
+      border-right: 1px solid $ink;
+      border-bottom: 0;
+    }
+  }
+}
+
+.footer-name {
+  font-weight: 700;
+}
+
+.footer-copy {
+  margin-top: 4px;
+}
+
+.footer-links {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  li + li {
+    margin-top: 4px;
+  }
+  a:hover {
+    text-decoration: underline;
   }
 }

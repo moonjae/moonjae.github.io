@@ -1,0 +1,137 @@
+// =============================================================================
+// Hero: plate + intro + latest
+// =============================================================================
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  min-height: 60vh;
+  border-bottom: 1px solid $ink;
+  @include from($bp-lg) {
+    flex-direction: row;
+  }
+}
+
+// Left: the plate
+
+.hero-art {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  background: $newsprint;
+  border-bottom: 1px solid $ink;
+  @include from($bp-lg) {
+    width: 66.6667%;
+    height: auto;
+    border-bottom: 0;
+    border-right: 1px solid $ink;
+  }
+}
+
+// The bust stands on the rule below: no bottom inset, bottom-aligned.
+
+.hero-plate {
+  position: absolute;
+  top: 10%;
+  right: 8%;
+  bottom: 0;
+  left: 8%;
+  img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+.hero-caption {
+  @include label;
+  position: absolute;
+  bottom: 12px;
+  left: $gutter;
+  pointer-events: none;
+}
+
+// Right: masthead, intro, latest
+
+.hero-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  @include from($bp-lg) {
+    width: 33.3333%;
+  }
+}
+
+.hero-intro {
+  padding: $block;
+  @include from($bp-md) {
+    padding: $block-md;
+  }
+}
+
+.hero-title {
+  font-size: 48px;
+  @include from($bp-md) {
+    font-size: 60px;
+  }
+}
+
+.hero-tagline {
+  @include label;
+  margin: 12px 0 32px;
+  @include from($bp-md) {
+    font-size: 12px;
+  }
+}
+
+.hero-blurb {
+  font-family: $font-serif;
+  font-size: 18px;
+  line-height: 1.625;
+  @include from($bp-md) {
+    font-size: 20px;
+  }
+}
+
+.hero-latest {
+  padding: $block;
+  border-top: 1px solid $ink;
+  @include from($bp-md) {
+    padding: $block-md;
+  }
+}
+
+.hero-latest-label {
+  @include label;
+  margin-bottom: 12px;
+}
+
+.hero-latest-link {
+  display: block;
+  &:hover .hero-latest-title {
+    text-decoration: underline;
+  }
+}
+
+.hero-latest-title {
+  font-family: $font-serif;
+  font-size: 24px;
+  line-height: 1.25;
+  @include from($bp-md) {
+    font-size: 30px;
+  }
+}
+
+.hero-latest-meta {
+  @include meta;
+  margin-top: 12px;
+}

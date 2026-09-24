@@ -1,12 +1,16 @@
 ---
 layout: default
-title: "The high quality, completely customizable and 100% free blog template for Jekyll"
-description: ""
+title: "About"
+description: "About Jae Moon"
 ---
 
-<div class="about {% if site.scrollappear_enabled %}scrollappear{% endif %}">
-  <img src="{% asset 'about.jpg' @path %}" alt="About Nielsen Ramon header image" />
-  <h1>About me</h1>
+<header class="page-header">
+  <div class="label">About</div>
+  <h1 class="page-title">About me</h1>
+</header>
+
+<section class="page-body">
+  <img class="page-image" src="{% asset 'about.jpg' @path %}" alt="{{ site.name }}" />
   <p>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -15,4 +19,4 @@ description: ""
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
     non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
   </p>
-</div>
+</section>

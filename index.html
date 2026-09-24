@@ -1,36 +1,56 @@
 ---
 layout: default
-title: "The high quality, completely customizable, performant and 100% free blog template for Jekyll"
-description: "Chalk uses all the best tools and merges them into one premium blogging theme."
+title: "Jae Moon"
+hide_nav: true
 ---
 
-<ul class="article-list">
-  {% for post in paginator.posts %}
-    <li class="article-list-item {% if site.scrollappear_enabled %}scrollappear{% endif %}">
-      <a href="{{ post.url | relative_url }}" title="{{ post.title }}">
-        <h5>
-          {{ post.title }}
-          {% include svg-icon.html icon="arrow-right" %}
-        </h5>
-      </a>
-      <p>
-        {% if post.description %}
-          {{ post.description }}  
-        {% else %}
-          {{ post.excerpt }}
-        {% endif %}
-      </p>
-      {% include article/info-footer.html post=post %}
-    </li>
+{% assign latest = site.posts.first %}
+
+<!-- Hero: plate + intro + latest -->
+<section class="hero">
+  <div class="hero-art" id="artBox">
+    <!-- The bust stands on the rule below: no bottom inset, bottom-aligned -->
+    <div class="hero-plate" id="plate">
+      <img src="{% asset '{{ site.hero.image }}' @path %}" alt="{{ site.hero.alt }}" draggable="false">
+    </div>
+    <p class="hero-caption">{{ site.hero.caption }}</p>
+  </div>
+
+  <div class="hero-aside">
+    <div class="hero-intro">
+      <h1 class="zine-title hero-title">{{ site.name }}</h1>
+      <p class="hero-tagline">{{ site.tagline }}</p>
+      <p class="hero-blurb">{{ site.intro }}</p>
+    </div>
+    {% if latest %}
+      <div class="hero-latest">
+        <div class="hero-latest-label">Latest</div>
+        <a href="{{ latest.url | relative_url }}" class="hero-latest-link">
+          <h2 class="hero-latest-title">{{ latest.title }}</h2>
+          <p class="hero-latest-meta">{% include post-meta.html post=latest %}</p>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Tag strip: one button per tag, counts from the post list -->
+<nav id="tagStrip" class="tag-strip" aria-label="Filter posts by tag">
+  <button type="button" class="tag tag-btn is-active" data-filter="all">All <span class="tag-count">({{ site.posts | size }})</span></button>
+  {% assign tags = site.tags | sort %}
+  {% for tag in tags %}
+    {% assign tag_slug = tag | first %}
+    {% assign tag_posts = tag | last %}
+    <button type="button" class="tag tag-btn" data-filter="{{ tag_slug }}">{% include tag-name.html tag=tag_slug %} <span class="tag-count">({{ tag_posts | size }})</span></button>
   {% endfor %}
-  {% if paginator.total_pages > 1 %}
-    <li class="article-pagination {% if site.settings.scrollappear_enabled %}scrollappear{% endif %}">
-      {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path }}" class="article-pagination-left">{% include svg-icon.html icon="arrow-left" %} Older posts</a>
-      {% endif %}
-      {% if paginator.previous_page %}
-        <a href="{{ paginator.previous_page_path }}" class="article-pagination-right">Newer posts {% include svg-icon.html icon="arrow-right" %}</a>
-      {% endif %}
-    </li>
-  {% endif %}
-</ul>
+</nav>
+
+<!-- Posts: one row each -->
+<section id="posts" class="posts">
+  <ol class="post-list">
+    {% for post in site.posts %}
+      {% include post-row.html post=post %}
+    {% endfor %}
+  </ol>
+  <p id="emptyNote" class="posts-empty" hidden>Nothing here yet.</p>
+</section>

@@ -1,7 +1,34 @@
-<footer class="footer {% if site.scrollappear_enabled %}scrollappear{% endif %}">
-  <p>
-    Chalk is a high quality, completely customizable, performant and 100% free
-    blog template for Jekyll built by
-    <a href="{{ 'about' | relative_url }}" title="About me">Nielsen Ramon</a>. Download it <a href="https://github.com/nielsenramon/chalk" rel="noreferrer noopener" target="_blank" title="Download Chalk">here</a>.
-  </p>
+<footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">{{ site.name }}</p>
+    <p class="footer-copy">© {{ site.time | date: "%Y" }}</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      {% if site.about_enabled == true %}
+        <li><a href="{{ 'about' | relative_url }}">About</a></li>
+      {% endif %}
+      {% if site.social.email %}
+        <li><a href="mailto:{{ site.social.email }}">Email</a></li>
+      {% endif %}
+      {% if site.social.github %}
+        <li><a href="https://github.com/{{ site.social.github }}" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      {% endif %}
+      {% if site.social.linkedin %}
+        <li><a href="https://www.linkedin.com/in/{{ site.social.linkedin }}" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      {% endif %}
+      {% if site.social.twitter %}
+        <li><a href="https://twitter.com/{{ site.social.twitter }}" rel="noreferrer noopener" target="_blank">Twitter</a></li>
+      {% endif %}
+      {% if site.social.instagram %}
+        <li><a href="https://instagram.com/{{ site.social.instagram }}" rel="noreferrer noopener" target="_blank">Instagram</a></li>
+      {% endif %}
+      {% if site.social.youtube %}
+        <li><a href="https://www.youtube.com/user/{{ site.social.youtube }}" rel="noreferrer noopener" target="_blank">YouTube</a></li>
+      {% endif %}
+      {% if site.rss_enabled == true %}
+        <li><a href="{{ 'feed.xml' | relative_url }}">RSS</a></li>
+      {% endif %}
+    </ul>
+  </div>
 </footer>

@@ -1,0 +1,30 @@
+// =============================================================================
+// Site header (every page except the index, which has the hero)
+// =============================================================================
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px $gutter;
+  border-bottom: 1px solid $ink;
+  @include from($bp-md) {
+    padding: 12px $gutter-md;
+  }
+}
+
+.site-header-logo {
+  font-size: 32px;
+  @include from($bp-md) {
+    font-size: 40px;
+  }
+}
+
+.site-header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}

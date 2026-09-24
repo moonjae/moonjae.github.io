@@ -1,0 +1,2 @@
+{{- include.post.date | date: "%Y.%m.%d" -}}
+{%- for tag in include.post.tags %} · {% include tag-name.html tag=tag %}{% endfor %} · {% include reading-time.html post=include.post %} min

@@ -1,0 +1,68 @@
+// =============================================================================
+// Simple pages: about, tags, tag archives, 404
+// =============================================================================
+
+.page-header {
+  padding: $block $gutter;
+  border-bottom: 1px solid $ink;
+  @include from($bp-md) {
+    padding: $block-md $gutter-md;
+  }
+  .label {
+    margin-bottom: 12px;
+  }
+}
+
+.page-title {
+  font-family: $font-serif;
+  font-size: 36px;
+  line-height: 1.1;
+  @include from($bp-md) {
+    font-size: 48px;
+  }
+}
+
+.page-meta {
+  @include meta;
+  margin-top: 16px;
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.page-body {
+  max-width: 68ch;
+  padding: $block $gutter;
+  font-family: $font-serif;
+  font-size: 19px;
+  line-height: 1.65;
+  @include from($bp-md) {
+    padding: $block-md $gutter-md;
+  }
+  p + p {
+    margin-top: 1em;
+  }
+  a {
+    text-decoration: underline;
+  }
+}
+
+.page-image {
+  max-width: 480px;
+  margin-bottom: $block;
+  border: 1px solid $ink;
+}
+
+.notfound {
+  padding: 15vh $gutter;
+  font-family: $font-serif;
+  font-size: 24px;
+  line-height: 1.5;
+  text-align: center;
+  .label {
+    margin-bottom: 12px;
+  }
+  a {
+    text-decoration: underline;
+  }
+}
