@@ -1,0 +1,151 @@
+
+# Pages CMS configuration (https://pagescms.org/docs/configuration/)
+#
+# Uploaded images go into images/ and Jekyll copies that folder to the site
+# root verbatim, so /images/<file> works in posts without the asset pipeline.
+
+media:
+  input: images
+  output: /images
+  categories: [image]
+  rename: safe
+
+content:
+  - name: posts
+    label: Posts
+    description: One markdown file per post. The date comes from the filename.
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+      field: create
+    view:
+      fields: [title, tags]
+      primary: title
+      search: [title, description]
+    fields:
+      - name: layout
+        type: string
+        default: post
+        hidden: true
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        description: One line shown under the title and used for previews.
+        type: string
+      - name: tags
+        label: Tags
+        type: reference
+        options:
+          collection: tags
+          multiple: true
+          value: "{fields.slug}"
+          label: "{fields.name}"
+          search: "slug,name"
+      - name: body
+        label: Body
+        type: rich-text
+        options:
+          format: markdown
+          path: images
+
+  - name: tags
+    label: Tags
+    description: Tag definitions. The slug is what posts reference; the name is what readers see.
+    type: collection
+    path: _my_tags
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      fields: [name, slug]
+      primary: name
+    fields:
+      - name: slug
+        label: Slug
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: "Lowercase letters, numbers and hyphens only"
+      - name: name
+        label: Name
+        type: string
+        required: true
+
+  - name: site
+    label: Site
+    description: Name, tagline, intro and links. Other keys in _config.yml are left untouched.
+    type: file
+    path: _config.yml
+    format: yaml
+    fields:
+      - name: name
+        label: Site name
+        type: string
+        required: true
+      - name: tagline
+        label: Tagline
+        type: string
+      - name: description
+        label: Description
+        description: Used for search engines, social previews and the RSS feed.
+        type: text
+      - name: intro
+        label: Intro
+        description: The paragraph under the masthead on the home page.
+        type: text
+      - name: hero
+        label: Hero plate
+        type: object
+        fields:
+          - name: image
+            label: Image filename
+            description: A file in _assets/images, for example hero-plate.jpg.
+            type: string
+          - name: alt
+            label: Alt text
+            type: string
+          - name: caption
+            label: Caption
+            type: string
+      - name: social
+        label: Links
+        type: object
+        fields:
+          - name: email
+            label: Email
+            type: string
+          - name: github
+            label: GitHub handle
+            type: string
+          - name: linkedin
+            label: LinkedIn handle
+            type: string
+          - name: twitter
+            label: Twitter handle
+            type: string
+          - name: instagram
+            label: Instagram handle
+            type: string
+          - name: youtube
+            label: YouTube handle
+            type: string
+
+settings:
+  content:
+    merge: true
+  commit:
+    templates:
+      create: "Create {path} (via Pages CMS)"
+      update: "Update {path} (via Pages CMS)"
+      delete: "Delete {path} (via Pages CMS)"
+      rename: "Rename {oldPath} to {newPath} (via Pages CMS)"
+
+actions:
+  - name: deploy
+    label: Deploy site
+    workflow: deploy.yml
