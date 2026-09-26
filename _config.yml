@@ -3,7 +3,7 @@
 name: Jae Moon
 tagline: Tech, Yu-Gi-Oh, and other thoughts
 description: "Notes from studying algorithms and system design, thoughts on Yu-Gi-Oh, and whatever else is on my mind."
-intro: "[Two sentences in your own voice. Who you are, what you do, and what this blog is for: notes from studying algorithms and system design, thoughts on Yu-Gi-Oh, and whatever else is on your mind.]"
+intro: "Hi, I'm Jae. I write software for a living and study it for fun, and this blog is my notebook: algorithms and system design, Yu-Gi-Oh, and the occasional stray thought."
 url: https://moonjae.github.io
 
 # Hero plate on the home page (image lives in _assets/images)
