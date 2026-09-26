@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[CPP] Variadic Template — Jae Moon</title>
+  
+  
+  <meta name="description" content="Variadic Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CPP] Variadic Template">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/cpp-variadic-template">
+  <meta property="og:description" content="Variadic Template">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/cpp-variadic-template">
+  <meta name="twitter:title" content="[CPP] Variadic Template">
+  <meta name="twitter:description" content="Variadic Template">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=cpp" class="post-header-tag invert-hover" title="See all posts tagged CPP">
+      <span class="tag">CPP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2023.01.27 · 2 min</p>
+  <h1 class="article-title">[CPP] Variadic Template</h1>
+  
+    
+      <p class="article-description">Variadic Template</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="variadic-template">Variadic Template</h1>
+<ul>
+  <li>Variadic Templates are used when don’t know how many templates are needed (can take 0 ~ n)</li>
+  <li>We can do this by using parameter packs</li>
+</ul>
+
+<p>In functions (T… args is called function parameter pack)</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>template&lt;typename... T&gt;
+void function(T... args) { }
+</code></pre></div></div>
+
+<p>In class/struct (T is called template parameter pack)</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>template&lt;typename... T&gt;
+class SampleClass{};
+</code></pre></div></div>
+
+<h1 id="how-to-use-them">How to use them</h1>
+<ul>
+  <li>For classes, parameter packs need to be the final parameter in the parameter list</li>
+  <li>For functions, parameter packs can be placed earlier if everything can be deduced from the function arguments</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>template&lt;typename... Ts, typename U, typename=void&gt;
+void valid(U, Ts...);
+</code></pre></div></div>
+
+<p>Above is valid because we know the first argument will be U and the rest will be Ts</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void valid(Ts..., U);
+</code></pre></div></div>
+
+<p>Above is not valid because when parameter pack is placed in the front, Ts cannot be deduced.</p>
+
+<h1 id="pack-expansion">Pack Expansion</h1>
+<ul>
+  <li>Pack Expansion can be done recursively</li>
+  <li>Which means we need to take care of base case</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>auto calc() {
+    return 0;
+}
+
+template&lt;typename T1, typename... T2&gt;
+auto calc(T1 t1, T2... t2) {
+    return t1 + calc(t2...);
+}
+
+calc(1,2,3);
+</code></pre></div></div>
+
+<ol>
+  <li>1,2,3 are passed into the second method since it has more than one arg.</li>
+  <li>t1 = 1 and t2 = 2,3</li>
+  <li>then we need to unpack t2 into 2 and 3</li>
+  <li>call(2,3) which makes t1 = 2 and t2 = 3</li>
+  <li>this continues until we no longer have any args</li>
+</ol>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>parameter pack: https://en.cppreference.com/w/cpp/language/parameter_pack</li>
+  <li>pack expansion: https://www.modernescpp.com/index.php/more-arbout-variadic-templates</li>
+  <li>pack expansion: https://kevinushey.github.io/blog/2016/01/27/introduction-to-c++-variadic-templates/</li>
+  <li>parameter pack placement: https://stackoverflow.com/questions/38629601/function-template-parameter-pack-not-at-the-end-of-the-parameter-list#comment64648723_38629697</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/cpp-const-in-cpp" title="[CPP] Const in C++">&larr; Older</a>
+      
+      
+        <a href="/posts/cpp-move-semantics" title="[CPP] Move Semantics">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

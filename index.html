@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>Jae Moon</title>
+  
+  
+  <meta name="description" content="Notes from studying algorithms and system design, thoughts on Yu-Gi-Oh, and whatever else is on my mind.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Jae Moon">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/">
+  <meta property="og:description" content="Notes from studying algorithms and system design, thoughts on Yu-Gi-Oh, and whatever else is on my mind.">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/">
+  <meta name="twitter:title" content="Jae Moon">
+  <meta name="twitter:description" content="Notes from studying algorithms and system design, thoughts on Yu-Gi-Oh, and whatever else is on my mind.">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    
+
+<!-- Hero: plate + intro + latest -->
+<section class="hero">
+  <div class="hero-art" id="artBox">
+    <!-- The bust stands on the rule below: no bottom inset, bottom-aligned -->
+    <div class="hero-plate" id="plate">
+      <img src="/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg" alt="Pharaoh bust in an engraved style, one side rendered as flowing wood grain" draggable="false">
+    </div>
+    <p class="hero-caption">Pharaoh bust — created by Jae Moon</p>
+  </div>
+
+  <div class="hero-aside">
+    <div class="hero-intro">
+      <h1 class="zine-title hero-title">Jae Moon</h1>
+      <p class="hero-tagline">Tech, Yu-Gi-Oh, and other thoughts</p>
+      <p class="hero-blurb">Hi, I'm Jae. I write software for a living and study it for fun, and this blog is my notebook: algorithms and system design, Yu-Gi-Oh, and the occasional stray thought.</p>
+    </div>
+    
+      <div class="hero-latest">
+        <div class="hero-latest-label">Latest</div>
+        <a href="/posts/sd-service-mesh-istio" class="hero-latest-link">
+          <h2 class="hero-latest-title">[SD] Service Mesh / Istio</h2>
+          <p class="hero-latest-meta">2026.09.25 · System design · 1 min</p>
+        </a>
+      </div>
+    
+  </div>
+</section>
+
+<!-- Tag strip: one button per tag, counts from the post list -->
+<nav id="tagStrip" class="tag-strip" aria-label="Filter posts by tag">
+  <button type="button" class="tag tag-btn is-active" data-filter="all">All <span class="tag-count">(30)</span></button>
+  
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="algo">Algo <span class="tag-count">(5)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="backtracking">Backtracking <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="balance">Balance <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="bfs">BFS <span class="tag-count">(2)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="binary-search">Binary-Search <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="cpp">CPP <span class="tag-count">(6)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="cs">CS <span class="tag-count">(3)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="dfs">DFS <span class="tag-count">(3)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="divide-and-conquer">Divide-and-Conquer <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="dp">DP <span class="tag-count">(2)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="ds">DS <span class="tag-count">(6)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="graph">Graph <span class="tag-count">(2)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="hashmap">Hashmap <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="math">Math <span class="tag-count">(3)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="prefix">Prefix <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="recursion">Recursion <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="sliding-window">Sliding-Window <span class="tag-count">(1)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="sorting">Sorting <span class="tag-count">(2)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="system-design">System design <span class="tag-count">(3)</span></button>
+  
+    
+    
+    <button type="button" class="tag tag-btn" data-filter="union-find">Union-Find <span class="tag-count">(1)</span></button>
+  
+</nav>
+
+<!-- Posts: one row each -->
+<section id="posts" class="posts">
+  <ol class="post-list">
+    
+      <li class="post-row" data-tags="system-design">
+  <a href="/posts/sd-service-mesh-istio" class="post-link invert-hover">
+    <span class="post-date">2026.09.25</span>
+    <span class="post-title">[SD] Service Mesh / Istio</span>
+    <span class="post-tags"><span class="tag">System design</span> </span>
+    <span class="post-minutes">1 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="system-design">
+  <a href="/posts/sd-vertical-scaling-vs-horizontal-scaling" class="post-link invert-hover">
+    <span class="post-date">2026.09.24</span>
+    <span class="post-title">[SD] Vertical Scaling vs Horizontal Scaling</span>
+    <span class="post-tags"><span class="tag">System design</span> </span>
+    <span class="post-minutes">1 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="system-design">
+  <a href="/posts/sd-latency-vs-throughput" class="post-link invert-hover">
+    <span class="post-date">2026.09.24</span>
+    <span class="post-title">[SD] Latency vs Throughput</span>
+    <span class="post-tags"><span class="tag">System design</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="dp">
+  <a href="/posts/lc-race-car" class="post-link invert-hover">
+    <span class="post-date">2023.07.05</span>
+    <span class="post-title">[LC] 818. Race Car</span>
+    <span class="post-tags"><span class="tag">DP</span> </span>
+    <span class="post-minutes">5 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="graph">
+  <a href="/posts/cses-flight-discount" class="post-link invert-hover">
+    <span class="post-date">2023.07.03</span>
+    <span class="post-title">[CSES] Flight Discount</span>
+    <span class="post-tags"><span class="tag">Graph</span> </span>
+    <span class="post-minutes">5 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="sorting">
+  <a href="/posts/cses-stick-lengths" class="post-link invert-hover">
+    <span class="post-date">2023.06.22</span>
+    <span class="post-title">[CSES] Stick Lengths</span>
+    <span class="post-tags"><span class="tag">Sorting</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="sorting">
+  <a href="/posts/cses-missing-coin-sum" class="post-link invert-hover">
+    <span class="post-date">2023.06.22</span>
+    <span class="post-title">[CSES] Missing Coin Sum</span>
+    <span class="post-tags"><span class="tag">Sorting</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="algo ds">
+  <a href="/posts/algo-ds-max-flow-algorithm" class="post-link invert-hover">
+    <span class="post-date">2023.06.05</span>
+    <span class="post-title">[ALGO][DS] Max Flow Algorithm</span>
+    <span class="post-tags"><span class="tag">Algo</span> <span class="tag">DS</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="algo ds">
+  <a href="/posts/algo-ds-eulerian-path-cycle" class="post-link invert-hover">
+    <span class="post-date">2023.05.21</span>
+    <span class="post-title">[ALGO][DS] Eulerian Path/Cycle</span>
+    <span class="post-tags"><span class="tag">Algo</span> <span class="tag">DS</span> </span>
+    <span class="post-minutes">1 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="algo ds">
+  <a href="/posts/algo-ds-dijkstra-vs-prims" class="post-link invert-hover">
+    <span class="post-date">2023.05.17</span>
+    <span class="post-title">[ALGO][DS] Dijkstra vs Prims</span>
+    <span class="post-tags"><span class="tag">Algo</span> <span class="tag">DS</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="algo ds">
+  <a href="/posts/algo-ds-dijkstra-and-bellmanford" class="post-link invert-hover">
+    <span class="post-date">2023.05.17</span>
+    <span class="post-title">[ALGO][DS] Dijkstra and Bellman-Ford</span>
+    <span class="post-tags"><span class="tag">Algo</span> <span class="tag">DS</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="algo ds">
+  <a href="/posts/algo-ds-monotonic-stack" class="post-link invert-hover">
+    <span class="post-date">2023.05.15</span>
+    <span class="post-title">[ALGO][DS] Monotonic Stack</span>
+    <span class="post-tags"><span class="tag">Algo</span> <span class="tag">DS</span> </span>
+    <span class="post-minutes">1 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="math">
+  <a href="/posts/math-how-to-check-if-two-lines-intersect" class="post-link invert-hover">
+    <span class="post-date">2023.02.04</span>
+    <span class="post-title">[Math] How to check if two lines intersect</span>
+    <span class="post-tags"><span class="tag">Math</span> </span>
+    <span class="post-minutes">1 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cpp">
+  <a href="/posts/cpp-move-semantics" class="post-link invert-hover">
+    <span class="post-date">2023.01.28</span>
+    <span class="post-title">[CPP] Move Semantics</span>
+    <span class="post-tags"><span class="tag">CPP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cpp">
+  <a href="/posts/cpp-variadic-template" class="post-link invert-hover">
+    <span class="post-date">2023.01.27</span>
+    <span class="post-title">[CPP] Variadic Template</span>
+    <span class="post-tags"><span class="tag">CPP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cpp">
+  <a href="/posts/cpp-const-in-cpp" class="post-link invert-hover">
+    <span class="post-date">2023.01.25</span>
+    <span class="post-title">[CPP] Const in C++</span>
+    <span class="post-tags"><span class="tag">CPP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cpp">
+  <a href="/posts/cpp-how-cpp-works" class="post-link invert-hover">
+    <span class="post-date">2023.01.10</span>
+    <span class="post-title">[CPP] How C++ works</span>
+    <span class="post-tags"><span class="tag">CPP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cs ds">
+  <a href="/posts/cs-ds-fenwick-tree" class="post-link invert-hover">
+    <span class="post-date">2023.01.06</span>
+    <span class="post-title">[CS][DS] Fenwick Tree</span>
+    <span class="post-tags"><span class="tag">CS</span> <span class="tag">DS</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cs cpp">
+  <a href="/posts/cs-cpp-integer-representations" class="post-link invert-hover">
+    <span class="post-date">2022.12.29</span>
+    <span class="post-title">[CS][CPP] Integer Representations</span>
+    <span class="post-tags"><span class="tag">CS</span> <span class="tag">CPP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="cs cpp">
+  <a href="/posts/cs-cpp-floating-point-numbers" class="post-link invert-hover">
+    <span class="post-date">2022.12.19</span>
+    <span class="post-title">[CS][CPP] Floating Point Numbers</span>
+    <span class="post-tags"><span class="tag">CS</span> <span class="tag">CPP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="union-find dfs bfs">
+  <a href="/posts/lc-regions-cut-by-slashes" class="post-link invert-hover">
+    <span class="post-date">2022.12.16</span>
+    <span class="post-title">[LC] 959. Regions Cut By Slashes</span>
+    <span class="post-tags"><span class="tag">Union-Find</span> <span class="tag">DFS</span> <span class="tag">BFS</span> </span>
+    <span class="post-minutes">4 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="math">
+  <a href="/posts/math-catalan-numbers" class="post-link invert-hover">
+    <span class="post-date">2022.12.08</span>
+    <span class="post-title">[Math] Catalan Numbers</span>
+    <span class="post-tags"><span class="tag">Math</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="dp">
+  <a href="/posts/lc-uncrossed-lines" class="post-link invert-hover">
+    <span class="post-date">2022.12.07</span>
+    <span class="post-title">[LC] 1035. Uncrossed Lines</span>
+    <span class="post-tags"><span class="tag">DP</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="graph dfs bfs">
+  <a href="/posts/lc-divide-nodes-into-the-maximum-number-of-groups" class="post-link invert-hover">
+    <span class="post-date">2022.12.06</span>
+    <span class="post-title">[LC] 2493. Divide Nodes Into the Maximum Number of Groups</span>
+    <span class="post-tags"><span class="tag">Graph</span> <span class="tag">DFS</span> <span class="tag">BFS</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="backtracking">
+  <a href="/posts/lc-n-queens-ii" class="post-link invert-hover">
+    <span class="post-date">2022.12.02</span>
+    <span class="post-title">[LC] 52. N-Queens II</span>
+    <span class="post-tags"><span class="tag">Backtracking</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="sliding-window">
+  <a href="/posts/lc-string-with-concatenation-of-all-words" class="post-link invert-hover">
+    <span class="post-date">2022.12.01</span>
+    <span class="post-title">[LC] 30. Substring with Concatenation of All Words</span>
+    <span class="post-tags"><span class="tag">Sliding-Window</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="binary-search">
+  <a href="/posts/lc-median-of-two-sorted-arrays" class="post-link invert-hover">
+    <span class="post-date">2022.11.29</span>
+    <span class="post-title">[LC] 4. Median of Two Sorted Arrays</span>
+    <span class="post-tags"><span class="tag">Binary-Search</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="math divide-and-conquer">
+  <a href="/posts/math-karatsuba-multiplication" class="post-link invert-hover">
+    <span class="post-date">2022.11.28</span>
+    <span class="post-title">[Math] Karatsuba Multiplication</span>
+    <span class="post-tags"><span class="tag">Math</span> <span class="tag">Divide-and-Conquer</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="balance prefix hashmap">
+  <a href="/posts/lc-count-subarrays-with-median-k" class="post-link invert-hover">
+    <span class="post-date">2022.11.27</span>
+    <span class="post-title">[LC] 2488. Count Subarrays With Median K</span>
+    <span class="post-tags"><span class="tag">Balance</span> <span class="tag">Prefix</span> <span class="tag">Hashmap</span> </span>
+    <span class="post-minutes">3 min</span>
+  </a>
+</li>
+
+    
+      <li class="post-row" data-tags="dfs recursion">
+  <a href="/posts/lc-minimum-fuel-cost-to-report-to-the-capital" class="post-link invert-hover">
+    <span class="post-date">2022.11.26</span>
+    <span class="post-title">[LC] 2477. Minimum Fuel Cost to Report to the Capital</span>
+    <span class="post-tags"><span class="tag">DFS</span> <span class="tag">Recursion</span> </span>
+    <span class="post-minutes">2 min</span>
+  </a>
+</li>
+
+    
+  </ol>
+  <p id="emptyNote" class="posts-empty" hidden>Nothing here yet.</p>
+</section>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

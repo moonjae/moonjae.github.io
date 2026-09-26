@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[LC] 2493. Divide Nodes Into the Maximum Number of Groups — Jae Moon</title>
+  
+  
+  <meta name="description" content="https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 2493. Divide Nodes Into the Maximum Number of Groups">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/lc-divide-nodes-into-the-maximum-number-of-groups">
+  <meta property="og:description" content="https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/lc-divide-nodes-into-the-maximum-number-of-groups">
+  <meta name="twitter:title" content="[LC] 2493. Divide Nodes Into the Maximum Number of Groups">
+  <meta name="twitter:description" content="https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=graph" class="post-header-tag invert-hover" title="See all posts tagged Graph">
+      <span class="tag">Graph</span>
+    </a>
+  
+    <a href="/#tag=dfs" class="post-header-tag invert-hover" title="See all posts tagged DFS">
+      <span class="tag">DFS</span>
+    </a>
+  
+    <a href="/#tag=bfs" class="post-header-tag invert-hover" title="See all posts tagged BFS">
+      <span class="tag">BFS</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.12.06 · 3 min</p>
+  <h1 class="article-title">[LC] 2493. Divide Nodes Into the Maximum Number of Groups</h1>
+  
+    
+      <p class="article-description"><a href="https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/description/" rel="noreferrer noopener" target="_blank">https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/description/</a></p>
+    
+  
+
+  <div class="prose">
+    <h1 id="problem-statement">Problem Statement</h1>
+<p>You are given a positive integer n representing the number of nodes in an undirected graph. The nodes are labeled from 1 to n.</p>
+
+<p>You are also given a 2D integer array edges, where edges[i] = [ai, bi] indicates that there is a bidirectional edge between nodes ai and bi. Notice that the given graph may be disconnected.</p>
+
+<p>Divide the nodes of the graph into m groups (1-indexed) such that:</p>
+
+<p>Each node in the graph belongs to exactly one group.
+For every pair of nodes in the graph that are connected by an edge [ai, bi], if ai belongs to the group with index x, and bi belongs to the group with index y, then |y - x| = 1.
+Return the maximum number of groups (i.e., maximum m) into which you can divide the nodes. Return -1 if it is impossible to group the nodes with the given conditions.</p>
+
+<p>Example 1:
+<img src="https://assets.leetcode.com/uploads/2022/10/13/example1.png" alt="" />
+Input: n = 6, edges = [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]]
+Output: 4
+Explanation: As shown in the image we:</p>
+<ul>
+  <li>Add node 5 to the first group.</li>
+  <li>Add node 1 to the second group.</li>
+  <li>Add nodes 2 and 4 to the third group.</li>
+  <li>Add nodes 3 and 6 to the fourth group.
+We can see that every edge is satisfied.
+It can be shown that that if we create a fifth group and move any node from the third or fourth group to it, at least on of the edges will not be satisfied.</li>
+</ul>
+
+<h1 id="intuition">Intuition</h1>
+<ol>
+  <li>A valid graph that meets both of the conditions has to be a bipartite</li>
+  <li>The max number of groups is equal to maximum distance between two nodes in a graph</li>
+</ol>
+
+<h1 id="approach">Approach</h1>
+<ol>
+  <li>create an adjacency matrix</li>
+  <li>find minimum distance between nodes</li>
+  <li>iterate from 1 to n
+    <ul>
+      <li>skip if the node has already been visited</li>
+      <li>check if the graph this node is in qualifies to be a bipartite</li>
+      <li>get max distance that can be found in this graph and add that to the answer</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="code">Code</h1>
+
+<p>Original Solution</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    int bfs(unordered_map&lt;int,vector&lt;int&gt;&gt; &amp; adj, int s) {
+        queue&lt;int&gt; q;
+        q.push(s);
+        int depth = 0;
+        unordered_set&lt;int&gt; visited;
+        visited.insert(s);
+        while (!q.empty()) {
+            int size = q.size();
+            unordered_set&lt;int&gt; neighbors;
+            for (int i = 0; i &lt; size; ++i) {
+                int node = q.front();
+                neighbors.insert(node);
+                q.pop();
+                for (int child: adj[node]) {
+                    if (neighbors.find(child) != neighbors.end()) return -1;
+                    if (visited.find(child) != visited.end()) continue;
+                    visited.insert(child);
+                    q.push(child);
+                }
+            }
+            ++depth;
+        }
+        return depth;
+    }
+    void getGroups(int n, unordered_map&lt;int, vector&lt;int&gt;&gt; &amp; adj, vector&lt;vector&lt;int&gt;&gt; &amp; groups) {
+        unordered_set&lt;int&gt; visited;
+        for (int i = 1; i &lt;= n; ++i) {
+            if (visited.find(i) != visited.end()) continue;
+            visited.insert(i);
+            queue&lt;int&gt; q;
+            vector&lt;int&gt; group;
+            q.push(i);
+            while (!q.empty()) {
+                int node = q.front();
+                q.pop();
+                group.push_back(node);
+                for (int nei: adj[node]) {
+                    if (visited.find(nei) != visited.end()) continue;
+                    visited.insert(nei);
+                    q.push(nei);
+                }
+            }
+            groups.push_back(group);
+        }
+    }
+    int magnificentSets(int n, vector&lt;vector&lt;int&gt;&gt;&amp; edges) {
+        unordered_map&lt;int, vector&lt;int&gt;&gt; adj;
+        for (vector&lt;int&gt; &amp; e: edges) {
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        vector&lt;vector&lt;int&gt;&gt; groups; 
+        getGroups(n, adj, groups);
+        int global_max = 0;
+        for (vector&lt;int&gt; &amp; group: groups) {
+            int local_max = INT_MIN;
+            for (int member: group) {
+                local_max = max(local_max, bfs(adj, member));
+            }
+            if (local_max == -1) return -1;
+            global_max += local_max;
+        }
+
+        return global_max;
+    }
+</code></pre></div></div>
+
+<p>Efficient Solution</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    vector&lt;int&gt;adj[505];
+    int col[505];
+    int dis[505][505];
+    bool flag;
+    //nodes in a connected graph.
+    vector&lt;int&gt;kara;
+    
+    //check if graph is bipartite
+    void dfs(int u,int c=1){
+        col[u] = c;
+        kara.push_back(u);
+        for(int&amp;v:adj[u]){
+            if(!col[v]) dfs(v,3-c);
+            else if(col[v]==c)flag = 0;// graph is not bipartite
+        }
+    }
+    //calculate minimum distance between all nodes.
+    void bfs(int src){
+        for(int i=1;i&lt;=500;i++)dis[src][i] = 100001;
+        dis[src][src] = 1;
+        queue&lt;int&gt;q;
+        q.push(src);
+        while(q.size()){
+            auto u = q.front();
+            q.pop();
+            for(int&amp;v:adj[u]){
+                if(dis[src][v]&gt;dis[src][u]+1){
+                    dis[src][v] = dis[src][u]+1;
+                    q.push(v);
+                }
+            }
+        }
+    }
+    int magnificentSets(int n, vector&lt;vector&lt;int&gt;&gt;&amp; edges) {
+        for(int i=1;i&lt;=n;i++)adj[i].clear();
+        memset(col,0,sizeof col);
+        for(auto&amp;e:edges){
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        
+        for(int i=1;i&lt;=n;i++)bfs(i);
+        int ans = 0;
+        int in = 0;
+        for(int i=1;i&lt;=n;i++){
+            if(col[i]==0){
+                kara.clear();
+                flag = 1;
+                in++;
+                dfs(i);
+                if(!flag) return -1;
+                int mxdis = 0;
+                for(int&amp;i:kara){
+                        for(int&amp;j:kara){
+                            mxdis=max(mxdis,dis[i][j]);
+                        }
+                }
+                ans+=mxdis;
+            }
+        }
+        return ans;
+    }
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-n-queens-ii" title="[LC] 52. N-Queens II">&larr; Older</a>
+      
+      
+        <a href="/posts/lc-uncrossed-lines" title="[LC] 1035. Uncrossed Lines">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

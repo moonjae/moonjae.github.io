@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[LC] 1035. Uncrossed Lines — Jae Moon</title>
+  
+  
+  <meta name="description" content="https://leetcode.com/problems/uncrossed-lines/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 1035. Uncrossed Lines">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/lc-uncrossed-lines">
+  <meta property="og:description" content="https://leetcode.com/problems/uncrossed-lines/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/lc-uncrossed-lines">
+  <meta name="twitter:title" content="[LC] 1035. Uncrossed Lines">
+  <meta name="twitter:description" content="https://leetcode.com/problems/uncrossed-lines/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=dp" class="post-header-tag invert-hover" title="See all posts tagged DP">
+      <span class="tag">DP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.12.07 · 2 min</p>
+  <h1 class="article-title">[LC] 1035. Uncrossed Lines</h1>
+  
+    
+      <p class="article-description"><a href="https://leetcode.com/problems/uncrossed-lines/description/" rel="noreferrer noopener" target="_blank">https://leetcode.com/problems/uncrossed-lines/description/</a></p>
+    
+  
+
+  <div class="prose">
+    <h1 id="problem-statement">Problem Statement</h1>
+<p>You are given two integer arrays nums1 and nums2. We write the integers of nums1 and nums2 (in the order they are given) on two separate horizontal lines.</p>
+
+<p>We may draw connecting lines: a straight line connecting two numbers nums1[i] and nums2[j] such that:</p>
+
+<p>nums1[i] == nums2[j], and
+the line we draw does not intersect any other connecting (non-horizontal) line.
+Note that a connecting line cannot intersect even at the endpoints (i.e., each number can only belong to one connecting line).</p>
+
+<p>Return the maximum number of connecting lines we can draw in this way.</p>
+
+<p>Example 1:
+<img src="https://assets.leetcode.com/uploads/2019/04/26/142.png" alt="" />
+Input: nums1 = [1,4,2], nums2 = [1,2,4]
+Output: 2
+Explanation: We can draw 2 uncrossed lines as in the diagram.
+We cannot draw 3 uncrossed lines, because the line from nums1[1] = 4 to nums2[2] = 4 will intersect the line from nums1[2]=2 to nums2[1]=2.</p>
+
+<h1 id="intuition">Intuition</h1>
+<ul>
+  <li>This problem is identical to Longest Common Subsequence problem</li>
+  <li>line == common character</li>
+</ul>
+
+<h1 id="approach">Approach</h1>
+<ol>
+  <li>create 2d vector</li>
+  <li>do a nested for loop
+    <ul>
+      <li>when nums1[i] == nums2[j], 1 + dp[i - 1][j - 1]</li>
+      <li>when nums1[i] != nums2[j], max(dp[i - 1][j], dp[i][j - 1])</li>
+    </ul>
+  </li>
+  <li>return dp[m][n]</li>
+</ol>
+
+<h1 id="complexity">Complexity</h1>
+<ul>
+  <li>space complexity: O(MN)</li>
+  <li>time complexity: O(MN)</li>
+</ul>
+
+<h1 id="code">Code</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    int maxUncrossedLines(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
+        int m = nums1.size(), n = nums2.size();
+        vector&lt;vector&lt;int&gt;&gt; dp(m + 1, vector&lt;int&gt;(n + 1, 0));
+        for (int i = 1; i &lt;= m; ++i) {
+            for (int j = 1; j &lt;= n; ++j) {
+                dp[i][j] = (nums1[i - 1] == nums2[j - 1]) ? 1 + dp[i - 1][j - 1] : max(dp[i][j - 1], dp[i - 1][j]);
+            }
+        }
+        return dp[m][n];
+    }
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-divide-nodes-into-the-maximum-number-of-groups" title="[LC] 2493. Divide Nodes Into the Maximum Number of Groups">&larr; Older</a>
+      
+      
+        <a href="/posts/math-catalan-numbers" title="[Math] Catalan Numbers">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

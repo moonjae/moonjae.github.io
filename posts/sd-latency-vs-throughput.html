@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[SD] Latency vs Throughput — Jae Moon</title>
+  
+  
+  <meta name="description" content="Notes from Grokking the System Design Interview">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[SD] Latency vs Throughput">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/sd-latency-vs-throughput">
+  <meta property="og:description" content="Notes from Grokking the System Design Interview">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/sd-latency-vs-throughput">
+  <meta name="twitter:title" content="[SD] Latency vs Throughput">
+  <meta name="twitter:description" content="Notes from Grokking the System Design Interview">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=system-design" class="post-header-tag invert-hover" title="See all posts tagged System design">
+      <span class="tag">System design</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2026.09.24 · 2 min</p>
+  <h1 class="article-title">[SD] Latency vs Throughput</h1>
+  
+    
+      <p class="article-description">Notes from Grokking the System Design Interview</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="definitions">Definitions</h1>
+
+<ul>
+  <li>Latency = network time + waiting time + processing time</li>
+  <li>Throughput = how many requests can be processed at a given time</li>
+  <li>Concurrency = how many requests can be processed at the same time
+    <ul>
+      <li>Concurrency = Latency * Throughput</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="example">Example</h1>
+
+<ul>
+  <li>A service must handle 2000 reqs per sec → throughput</li>
+  <li>Each request takes 0.05 sec → latency</li>
+  <li>Concurrency: it takes 1 sec to process 2000 reqs. Since each request takes 0.05 sec, the total amount of time to process 2000 would be 0.05 * 2000 = 200 sec if there were no concurrency. But because they can be processed in 1 sec, the concurrency is 200.</li>
+</ul>
+
+<h1 id="where-the-tradeoff-comes-from">Where the tradeoff comes from</h1>
+
+<p>Let’s say you need to increase throughput via batching, for example. When you use batching, the latency of an individual request worsens, since each request needs to wait until the rest of the batch arrives before everything can get processed at once.</p>
+
+<h1 id="how-to-improve-latency">How to improve latency</h1>
+
+<ul>
+  <li>Move data closer to users, e.g. CDN</li>
+  <li>Cache</li>
+  <li>Fewer network trips</li>
+  <li>Keep utilization moderate</li>
+  <li>Improve DB queries</li>
+  <li>Remove unnecessary jobs while the user is waiting</li>
+</ul>
+
+<h1 id="how-to-improve-throughput">How to improve throughput</h1>
+
+<ul>
+  <li>More servers</li>
+  <li>Increase concurrency</li>
+  <li>Batching</li>
+  <li>Queue (allows multiple workers to work at the same time)</li>
+  <li>Sharding (spreads data access across multiple DBs)</li>
+  <li>Cache (cache improves latency, and it frees up resources for more requests)</li>
+</ul>
+
+<h1 id="choosing-what-to-optimize">Choosing what to optimize</h1>
+
+<ul>
+  <li>Is the user waiting for the response? (yes → latency, no → throughput)</li>
+  <li>Is the system overloaded? (add more capacity; if not, both latency and throughput will suffer)</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-race-car" title="[LC] 818. Race Car">&larr; Older</a>
+      
+      
+        <a href="/posts/sd-vertical-scaling-vs-horizontal-scaling" title="[SD] Vertical Scaling vs Horizontal Scaling">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

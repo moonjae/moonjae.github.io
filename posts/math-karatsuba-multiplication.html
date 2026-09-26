@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[Math] Karatsuba Multiplication — Jae Moon</title>
+  
+  
+  <meta name="description" content="Karatsuba algorithm is a fast integer multiplication algorithm using divide and conquer approach">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[Math] Karatsuba Multiplication">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/math-karatsuba-multiplication">
+  <meta property="og:description" content="Karatsuba algorithm is a fast integer multiplication algorithm using divide and conquer approach">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/math-karatsuba-multiplication">
+  <meta name="twitter:title" content="[Math] Karatsuba Multiplication">
+  <meta name="twitter:description" content="Karatsuba algorithm is a fast integer multiplication algorithm using divide and conquer approach">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=math" class="post-header-tag invert-hover" title="See all posts tagged Math">
+      <span class="tag">Math</span>
+    </a>
+  
+    <a href="/#tag=divide-and-conquer" class="post-header-tag invert-hover" title="See all posts tagged Divide-and-Conquer">
+      <span class="tag">Divide-and-Conquer</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.11.28 · 3 min</p>
+  <h1 class="article-title">[Math] Karatsuba Multiplication</h1>
+  
+    
+      <p class="article-description">Karatsuba algorithm is a fast integer multiplication algorithm using divide and conquer approach</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="algorithm-description">Algorithm Description</h1>
+<p>The naive approach for multiplication is slow and it takes about O(n^2) time. Karatsuba Multiplication is a more efficient algorithm that can be used for multiplication of numbers.</p>
+
+<h1 id="intuition">Intuition</h1>
+<p>We need to figure out how many passengers need to pass through a given city. Once we have that we know how many liters we need to move those passengers to the next city.</p>
+
+<h1 id="approach">Approach</h1>
+<p>Divide and Conquer
+Let’s say we are give two numbers as inputs; 1234 and 5678</p>
+<ol>
+  <li>we need to divide those numbers into halves
+    <ul>
+      <li>1234 can be divided into a: 12, b: 34</li>
+      <li>5678 can be divided into c: 56, d: 78</li>
+    </ul>
+  </li>
+  <li>compute a * c</li>
+  <li>compute b * d</li>
+  <li>compute ad + bc
+    <ul>
+      <li>ad + bc = (a + b)(c + d) - ac - bd = ac + bc + ad + bd - ac - bd = ad + bc</li>
+      <li>therefore we need to compute (a + b) * (c + d) and then subtract ac and bd from it</li>
+    </ul>
+  </li>
+  <li>return pow(10, b’s length * 2) * ac + pow(10, b’s length) * (ad + bc) + bd</li>
+  <li>continue until one of the number has single digit, in that case we can simply execute multiplication and then return it</li>
+</ol>
+
+<h1 id="complexity">Complexity</h1>
+<ul>
+  <li>Time complexity: O(n^log2 3)</li>
+  <li>need to use master theorem to calculate</li>
+</ul>
+
+<h1 id="code">Code</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string multiply(string &amp; num1, string &amp; num2) {
+    if (num1.length() &lt; num2.length()) swap(num1, num2);
+    if (num2.length() == 1 &amp;&amp; num2[0] == '0') return "0";
+    int carry = 0;
+    string result = "";
+    for (int i = num1.length() - 1, bnum = num2[0] - '0'; i &gt;= 0; --i) {
+        int anum = num1[i] - '0';
+        int calculated = anum * bnum + carry;
+        carry = (calculated &gt;= 10) ? calculated / 10 : 0;
+        result = char('0' + (calculated % 10)) + result;
+    }
+    if (carry) result = char('0' + carry) + result;
+    return result;
+}
+string add(string num1, string num2) {
+    string result = "";
+    if (num1.length() &lt; num2.length()) swap(num1, num2);
+    int carry = 0;
+    for (int i = num1.length() - 1, j = num2.length() - 1; i &gt;= 0 || j &gt;= 0; --i, --j) {
+        int a = num1[i] - '0';
+        int b = j &gt;= 0 ? num2[j] - '0': 0;
+        int sum = a + b + carry;
+        carry = (sum &gt;= 10) ? sum / 10 : 0;
+        result = char('0' + sum % 10) + result;
+    }
+    return carry ? "1" + result : result;
+}
+string subtract(string num1, string num2) {
+    if (num1.length() == num2.length() &amp;&amp; num1 &lt; num2) swap(num1, num2);
+    else if (num1.length() &lt; num2.length()) swap(num1, num2);
+    for (int i = num1.length() - 1, j = num2.length() - 1; j &gt;= 0; --i, --j) {
+        int a = num1[i] - '0';
+        int b = num2[j] - '0';
+        if (a &lt; b) {
+            int k = i - 1;
+            while (num1[k] == '0') num1[k--] = '9';
+            num1[k] = char(num1[k] - 1);
+            a += 10;
+        }
+        int calc_result = a - b;
+        num1[i] = char('0' + calc_result);
+    }
+    int zero_cnt = 0;
+    for (int i = 0; i &lt; num1.length() &amp;&amp; num1[i] == '0'; ++i, ++zero_cnt) {}
+    return num1.substr(zero_cnt, num1.length() - zero_cnt);
+}
+void raisePower(string &amp; num, int n) {
+    if (num[0] == '0') return;
+    for (int i = 0; i &lt; n; ++i) num.push_back('0');
+}
+string karatsubaMultiplication(string &amp; num1, string &amp; num2) {
+    if (num1.length() == 1 || num2.length() == 1) return multiply(num1, num2);
+    if (num1.length() &lt; num2.length()) swap(num1, num2);
+    int n = num1.length();
+    int a_len = n / 2 + (n % 2 ? 1 : 0);
+    int b_len = n - a_len;
+    string a = num1.substr(0, a_len);
+    string b = num1.substr(a_len, b_len);
+    string c = num2.length() &lt; a_len ? "0": num2.substr(0, num2.length() - b_len);
+    string d = num2.length() &lt;= b_len ? num2: num2.substr(num2.length() - b_len, b_len);
+
+    string a_plus_b = add(a, b);
+    string c_plus_d = add(c, d);
+    string a_plus_b_times_c_plus_d = karatsubaMultiplication(a_plus_b, c_plus_d);
+    string ac = karatsubaMultiplication(a, c);
+    string bd = karatsubaMultiplication(b, d);
+    string ad_plus_bc = subtract(subtract(a_plus_b_times_c_plus_d, ac), bd);
+    raisePower(ac, b_len * 2);
+    raisePower(ad_plus_bc, b_len);
+    return add(add(ac, ad_plus_bc), bd);
+}
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-count-subarrays-with-median-k" title="[LC] 2488. Count Subarrays With Median K">&larr; Older</a>
+      
+      
+        <a href="/posts/lc-median-of-two-sorted-arrays" title="[LC] 4. Median of Two Sorted Arrays">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

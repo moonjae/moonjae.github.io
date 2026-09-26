@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[LC] 30. Substring with Concatenation of All Words — Jae Moon</title>
+  
+  
+  <meta name="description" content="https://leetcode.com/problems/substring-with-concatenation-of-all-words/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 30. Substring with Concatenation of All Words">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/lc-string-with-concatenation-of-all-words">
+  <meta property="og:description" content="https://leetcode.com/problems/substring-with-concatenation-of-all-words/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/lc-string-with-concatenation-of-all-words">
+  <meta name="twitter:title" content="[LC] 30. Substring with Concatenation of All Words">
+  <meta name="twitter:description" content="https://leetcode.com/problems/substring-with-concatenation-of-all-words/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=sliding-window" class="post-header-tag invert-hover" title="See all posts tagged Sliding-Window">
+      <span class="tag">Sliding-Window</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.12.01 · 3 min</p>
+  <h1 class="article-title">[LC] 30. Substring with Concatenation of All Words</h1>
+  
+    
+      <p class="article-description"><a href="https://leetcode.com/problems/substring-with-concatenation-of-all-words/description/" rel="noreferrer noopener" target="_blank">https://leetcode.com/problems/substring-with-concatenation-of-all-words/description/</a></p>
+    
+  
+
+  <div class="prose">
+    <h1 id="problem-statement">Problem Statement</h1>
+<p>You are given a string s and an array of strings words. All the strings of words are of the same length.
+A concatenated substring in s is a substring that contains all the strings of any permutation of words concatenated.</p>
+
+<p>For example, if words = [“ab”,”cd”,”ef”], then “abcdef”, “abefcd”, “cdabef”, “cdefab”, “efabcd”, and “efcdab” are all concatenated strings. “acdbef” is not a concatenated substring because it is not the concatenation of any permutation of words.
+Return the starting indices of all the concatenated substrings in s. You can return the answer in any order.</p>
+
+<p>Example 1:
+Input: s = “barfoothefoobarman”, words = [“foo”,”bar”]
+Output: [0,9]
+Explanation: Since words.length == 2 and words[i].length == 3, the concatenated substring has to be of length 6.
+The substring starting at 0 is “barfoo”. It is the concatenation of [“bar”,”foo”] which is a permutation of words.
+The substring starting at 9 is “foobar”. It is the concatenation of [“foo”,”bar”] which is a permutation of words.
+The output order does not matter. Returning [9,0] is fine too.</p>
+
+<h1 id="intuition">Intuition</h1>
+<p>Naive Approach</p>
+<ul>
+  <li>A valid substring can start at any index so we need to iterate through s to account for all the possibilities for each start index</li>
+  <li>index i can be a start of a substring but it can also be a part of other substrings that started before i so we need ot account for these</li>
+  <li>This approach is very inefficient and we are not making use of the fact that the length of each word is equal to each other</li>
+</ul>
+
+<p>Efficient Approach</p>
+<ul>
+  <li>Since we know the word length is fixed we can basically check if every word with length n</li>
+  <li>for example when s is 1234, when word length is 3, we should just ignore 12, 23, 34</li>
+</ul>
+
+<h1 id="approach">Approach</h1>
+<p>Slding Window</p>
+<ol>
+  <li>create a hashmap and store frequencies of each word in words</li>
+  <li>iterate through 0 ~ wordlen - 1
+    <ul>
+      <li>0 ~ wordlen - 1 will be used as the start index for each potential substring</li>
+    </ul>
+  </li>
+  <li>use sliding window technique</li>
+  <li>get the first wordlen chars and see if it exist in the hashmap</li>
+  <li>if the word does not exist, we need to reset the substring</li>
+  <li>if it does exist and cnt is set to 0, increment 0 until cnt is back to 1</li>
+  <li>decreate the cnt for this word</li>
+  <li>if all the words have been visited we know that this substring is a valid substring
+    <ul>
+      <li>increment left so that we can check if this again can create another valid substring in the next iteration</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="complexity">Complexity</h1>
+<ul>
+  <li>when length of s is n, length of each word is a, length of words is b</li>
+  <li>Time complexity: O(b + n * a)</li>
+</ul>
+
+<h1 id="code">Code</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    void check(string &amp; s, int start, unordered_map&lt;string, int&gt; &amp; cnt1, vector&lt;int&gt; &amp; answer, int word_len, int size) {
+        int l = start;
+        int left = size;
+        unordered_map&lt;string, int&gt; cnt = cnt1;
+        unordered_map&lt;int, string&gt; cache; 
+        for (int r = start; r &lt; s.length(); r += word_len) {
+            string str = s.substr(r, word_len);
+            if (cnt.find(str) == cnt.end()) {
+                l = r + word_len;
+                left = size;
+                cnt = cnt1;
+            }
+            else {
+                while (cnt[str] == 0) {
+                    cnt[cache[l]]++;
+                    l += word_len;
+                    ++left;
+                }
+                cache[r] = str;
+                --cnt[str];
+                --left;
+                if (!left) {
+                    answer.push_back(l);
+                    cnt[cache[l]]++;
+                    l += word_len;
+                    ++left;
+                }
+            }
+        }
+    }
+    vector&lt;int&gt; findSubstring(string s, vector&lt;string&gt;&amp; words) {
+        int word_len = words[0].length();
+        if (s.length() &lt; word_len) return {};
+        unordered_map&lt;string, int&gt; cnt;
+        vector&lt;int&gt; answer;
+        for (string &amp; word: words) {
+            ++cnt[word];
+        }
+        
+        for (int i = 0; i &lt; word_len; ++i) {
+            check(s, i, cnt, answer, word_len, words.size());
+        }
+
+        return answer;
+    }
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-median-of-two-sorted-arrays" title="[LC] 4. Median of Two Sorted Arrays">&larr; Older</a>
+      
+      
+        <a href="/posts/lc-n-queens-ii" title="[LC] 52. N-Queens II">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

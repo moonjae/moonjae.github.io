@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="https://www.w3.org/2005/Atom" xmlns:dc="https://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Jae Moon</title>
+    <description>Notes from studying algorithms and system design, thoughts on Yu-Gi-Oh, and whatever else is on my mind.</description>
+    <link>https://moonjae.github.io</link>
+    <atom:link href="https://moonjae.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>[SD] Service Mesh / Istio</title>
+        <description>What a service mesh is, how Istio does it, and why you'd want one</description>
+        <pubDate>Fri, 25 Sep 2026 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/sd-service-mesh-istio</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/sd-service-mesh-istio</guid>
+      </item>
+    
+      <item>
+        <title>[SD] Vertical Scaling vs Horizontal Scaling</title>
+        <description>Notes from Grokking the System Design Interview</description>
+        <pubDate>Thu, 24 Sep 2026 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/sd-vertical-scaling-vs-horizontal-scaling</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/sd-vertical-scaling-vs-horizontal-scaling</guid>
+      </item>
+    
+      <item>
+        <title>[SD] Latency vs Throughput</title>
+        <description>Notes from Grokking the System Design Interview</description>
+        <pubDate>Thu, 24 Sep 2026 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/sd-latency-vs-throughput</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/sd-latency-vs-throughput</guid>
+      </item>
+    
+      <item>
+        <title>[LC] 818. Race Car</title>
+        <description>https://leetcode.com/problems/race-car</description>
+        <pubDate>Wed, 05 Jul 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/lc-race-car</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/lc-race-car</guid>
+      </item>
+    
+      <item>
+        <title>[CSES] Flight Discount</title>
+        <description>https://cses.fi/problemset/task/1195</description>
+        <pubDate>Mon, 03 Jul 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/cses-flight-discount</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/cses-flight-discount</guid>
+      </item>
+    
+      <item>
+        <title>[CSES] Stick Lengths</title>
+        <description>https://cses.fi/problemset/task/1074</description>
+        <pubDate>Thu, 22 Jun 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/cses-stick-lengths</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/cses-stick-lengths</guid>
+      </item>
+    
+      <item>
+        <title>[CSES] Missing Coin Sum</title>
+        <description>https://cses.fi/problemset/task/2183/</description>
+        <pubDate>Thu, 22 Jun 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/cses-missing-coin-sum</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/cses-missing-coin-sum</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Max Flow Algorithm</title>
+        <description>Max Flow Algorithm / Ford-Fulkerson</description>
+        <pubDate>Mon, 05 Jun 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/algo-ds-max-flow-algorithm</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/algo-ds-max-flow-algorithm</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Eulerian Path/Cycle</title>
+        <description>Eulerian Path/Cycle</description>
+        <pubDate>Sun, 21 May 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/algo-ds-eulerian-path-cycle</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/algo-ds-eulerian-path-cycle</guid>
+      </item>
+    
+      <item>
+        <title>[ALGO][DS] Dijkstra vs Prims</title>
+        <description>Dijkstra vs Prims</description>
+        <pubDate>Wed, 17 May 2023 00:00:00 -0500</pubDate>
+        <link>https://moonjae.github.io/posts/algo-ds-dijkstra-vs-prims</link>
+        <guid isPermaLink="true">https://moonjae.github.io/posts/algo-ds-dijkstra-vs-prims</guid>
+      </item>
+    
+  </channel>
+</rss>

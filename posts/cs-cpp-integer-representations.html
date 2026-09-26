@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[CS][CPP] Integer Representations — Jae Moon</title>
+  
+  
+  <meta name="description" content="Integer representations">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CS][CPP] Integer Representations">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/cs-cpp-integer-representations">
+  <meta property="og:description" content="Integer representations">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/cs-cpp-integer-representations">
+  <meta name="twitter:title" content="[CS][CPP] Integer Representations">
+  <meta name="twitter:description" content="Integer representations">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=cs" class="post-header-tag invert-hover" title="See all posts tagged CS">
+      <span class="tag">CS</span>
+    </a>
+  
+    <a href="/#tag=cpp" class="post-header-tag invert-hover" title="See all posts tagged CPP">
+      <span class="tag">CPP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.12.29 · 2 min</p>
+  <h1 class="article-title">[CS][CPP] Integer Representations</h1>
+  
+    
+      <p class="article-description">Integer representations</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="integer-numbers">Integer numbers</h1>
+<p><img src="https://www.bccfalna.com/ebooks/wp-content/uploads/ebooks/2014/12/Data-Type-Limits-in-C-1.png" alt="" /></p>
+
+<h1 id="steps-to-represent-negative-integerrs">Steps to represent negative integerrs</h1>
+<ul>
+  <li>convert decimal number into binary</li>
+  <li>flip all the bits(0 -&gt; 1 and 1 -&gt; 0)</li>
+  <li>add one to the flipped bits</li>
+</ul>
+
+<h1 id="why-twos-complement-is-used">Why two’s complement is used</h1>
+<ul>
+  <li>When I first read about two’s complement, I used to wonder why such scheme is really necessary since we can just use the first bit as a sign bit. For example when 2 can be represented as 0010, we can just flip the sign bit and represent -2 as 1010</li>
+  <li>The approach above is intuitive but becomes problematic when need to do addition operations</li>
+  <li>For example, let’s say we need to ad -1 and 2</li>
+  <li>Using the intuitive approach, -1 -&gt; 1001 and 2 -&gt; 0010 and therefore, -1 + 2 = 1001 + 0010 = 1011 = -3 which is not correct</li>
+  <li>Using two’s complement, -1 -&gt; 1111 and 2-&gt; 0010 and therefore -1 + 2 = 1111 + 0010 = 10001 and we need to discard the carry -&gt; 0001 = 1</li>
+  <li>Also, when using the intuitive method, 0000 and 1000 both represent zero</li>
+  <li>Also, the intuitive method is inconvenient when it comes to comparing numbers. -7 (0111) is smaller than -6 (0110) but, 0111 is actually larger than 0110</li>
+</ul>
+
+<h1 id="why-int_min-is--int_max---1">Why INT_MIN is -INT_MAX - 1</h1>
+<ul>
+  <li>INT_MAX is 0X7FFFFFFF and when we flip the bits, we get 0X80000000</li>
+  <li>Then we need to add 1 to the above which makes it 0X80000001</li>
+  <li>Since we need to add 1 in the end, we can never have 0X80000000 after step 2 and therefore we can use it as INT_MIN</li>
+</ul>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>https://docs.oracle.com/cd/E19253-01/817-6223/chp-typeopexpr-2/index.html</li>
+  <li>https://stackoverflow.com/questions/1125304/why-prefer-twos-complement-over-sign-and-magnitude-for-signed-numbers</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/cs-cpp-floating-point-numbers" title="[CS][CPP] Floating Point Numbers">&larr; Older</a>
+      
+      
+        <a href="/posts/cs-ds-fenwick-tree" title="[CS][DS] Fenwick Tree">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>
