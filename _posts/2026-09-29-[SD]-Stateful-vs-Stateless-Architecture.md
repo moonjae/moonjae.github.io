@@ -35,10 +35,10 @@ When it is justified
 # Example: game server
 
 ```
-Players -> Primary game server
-               |-> Hot replica
-               |-> Event log
-                     '-> Checkpoints
+Players ──▶ Primary game server
+              ├── Hot replica
+              ├── Event log
+              └── Checkpoints
 ```
 
 - **Hot replica**: near-current copy, promoted if the primary dies
