@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[LC] 818. Race Car — Jae Moon</title>
+  
+  
+  <meta name="description" content="https://leetcode.com/problems/race-car">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 818. Race Car">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/lc-race-car">
+  <meta property="og:description" content="https://leetcode.com/problems/race-car">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/lc-race-car">
+  <meta name="twitter:title" content="[LC] 818. Race Car">
+  <meta name="twitter:description" content="https://leetcode.com/problems/race-car">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=dp" class="post-header-tag invert-hover" title="See all posts tagged DP">
+      <span class="tag">DP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2023.07.05 · 5 min</p>
+  <h1 class="article-title">[LC] 818. Race Car</h1>
+  
+    
+      <p class="article-description"><a href="https://leetcode.com/problems/race-car" rel="noreferrer noopener" target="_blank">https://leetcode.com/problems/race-car</a></p>
+    
+  
+
+  <div class="prose">
+    <h1 id="problem-statement">Problem Statement</h1>
+
+<p>Your car starts at position 0 and speed +1 on an infinite number line. Your car can go into negative positions. Your car drives automatically according to a sequence of instructions ‘A’ (accelerate) and ‘R’ (reverse):</p>
+
+<p>When you get an instruction ‘A’, your car does the following: position += speed speed *= 2 When you get an instruction ‘R’, your car does the following: If your speed is positive then speed = -1 otherwise speed = 1 Your position stays the same. For example, after commands “AAR”, your car goes to positions 0 –&gt; 1 –&gt; 3 –&gt; 3, and your speed goes to 1 –&gt; 2 –&gt; 4 –&gt; -1.</p>
+
+<p>Given a target position target, return the length of the shortest sequence of instructions to get there.</p>
+
+<h1 id="intuition">Intuition</h1>
+
+<p>Solution 1. Dijkstra</p>
+
+<ol>
+  <li>We basically need to find the shortest path from 0 to target</li>
+  <li>Every iteration we can acclerate to the right side upto x amount of times</li>
+  <li>Every iteration we can acclerate to the left side upto x amount of times</li>
+</ol>
+
+<p>Solution 2. DP</p>
+
+<ol>
+  <li>We have two choices
+    <ul>
+      <li>move past target and go backwards</li>
+      <li>move and stop right before target</li>
+    </ul>
+  </li>
+  <li>For the first choice, we basically need to accelerate log(n) + 1 times and then move backwards so we need one R</li>
+  <li>For the second choice, we needt o accelerate log(n) times
+    <ul>
+      <li>in order to avoid extra steps, we need to interleave pos steps and neg steps as much as possible</li>
+      <li>therefore we need to see if stepping backwards 0 ~ log(n) - 1 times can create an optimal result</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="code">Code</h1>
+
+<p>Solution 1</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">direct</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">cost</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">cost</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">racecar</span><span class="p">(</span><span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">cost</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">});</span>
+        <span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">log2</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> 
+        <span class="kt">int</span> <span class="n">barrier</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">);</span>
+    
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+<span class="n">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+<span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">pos</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">cost</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">direct</span><span class="p">][</span><span class="n">node</span><span class="p">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">.</span><span class="n">cost</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+
+<span class="c1">// move to right</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">new_pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">pos</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">new_pos</span> <span class="o">&gt;</span> <span class="n">barrier</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+    
+    <span class="kt">int</span> <span class="n">new_cost</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">cost</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">new_direct</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">direct</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="p">.</span><span class="n">direct</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">new_cost</span><span class="o">++</span><span class="p">;</span> 
+        <span class="n">new_direct</span><span class="o">++</span><span class="p">;</span> 
+    <span class="p">}</span>
+    <span class="n">new_direct</span> <span class="o">%=</span> <span class="mi">2</span><span class="p">;</span> 
+    <span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">new_direct</span><span class="p">].</span><span class="n">count</span><span class="p">(</span><span class="n">new_pos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">cost</span><span class="p">[</span><span class="n">new_direct</span><span class="p">][</span><span class="n">new_pos</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">new_cost</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cost</span><span class="p">[</span><span class="n">new_direct</span><span class="p">][</span><span class="n">new_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span><span class="p">;</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">new_pos</span><span class="p">,</span> <span class="n">new_cost</span><span class="p">,</span> <span class="n">new_direct</span><span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// move to left </span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">new_pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">pos</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">new_pos</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">barrier</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+    
+    <span class="kt">int</span> <span class="n">new_cost</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">cost</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">new_direct</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">direct</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">direct</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">new_cost</span><span class="o">++</span><span class="p">;</span> 
+        <span class="n">new_direct</span><span class="o">++</span><span class="p">;</span> 
+    <span class="p">}</span>
+    <span class="n">new_direct</span> <span class="o">%=</span> <span class="mi">2</span><span class="p">;</span> 
+    <span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">new_direct</span><span class="p">].</span><span class="n">count</span><span class="p">(</span><span class="n">new_pos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">cost</span><span class="p">[</span><span class="n">new_direct</span><span class="p">][</span><span class="n">new_pos</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">new_cost</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cost</span><span class="p">[</span><span class="n">new_direct</span><span class="p">][</span><span class="n">new_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span><span class="p">;</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">new_pos</span><span class="p">,</span> <span class="n">new_cost</span><span class="p">,</span> <span class="n">new_direct</span><span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> 
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Solution 2</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">cache</span><span class="p">;</span> 
+    <span class="kt">int</span> <span class="nf">racecar</span><span class="p">(</span><span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">target</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cache</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">target</span><span class="p">))</span> <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">target</span><span class="p">];</span> 
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">log2</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> 
+        <span class="kt">int</span> <span class="n">min_value</span> <span class="o">=</span> <span class="n">racecar</span><span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">min_value</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span>  <span class="n">racecar</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">))</span> <span class="o">+</span> <span class="n">n</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        
+        <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_value</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/cses-flight-discount" title="[CSES] Flight Discount">&larr; Older</a>
+      
+      
+        <a href="/posts/sd-latency-vs-throughput" title="[SD] Latency vs Throughput">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>
