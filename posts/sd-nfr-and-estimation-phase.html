@@ -59,7 +59,7 @@
 </header>
 
 <article class="article">
-  <p class="article-meta">2026.10.07 · 4 min</p>
+  <p class="article-meta">2026.10.07 · 5 min</p>
   <h1 class="article-title">[SD] System Design Template: 2. NFR + Estimation</h1>
   
     
@@ -68,7 +68,7 @@
   
 
   <div class="prose">
-    <h1 id="step-2-nfr--estimation">Step 2: NFR + estimation</h1>
+<h1 id="step-2-nfr--estimation">Step 2: NFR + estimation</h1>
 
 <p>After defining the <strong>functional requirements</strong>—what the system must do—identify its non-functional requirements (NFRs), such as scale, latency, availability, consistency, and geographic reach. Then turn those requirements into capacity estimates.</p>
 
@@ -86,12 +86,12 @@
   <li>Read/write ratio</li>
 </ul>
 
-<p>Let <code class="highlighter-rouge">actions/day = DAU × actions per user per day</code>. Split those actions by the read/write ratio to estimate daily reads and writes.</p>
+<p>Let <code>actions/day = DAU × actions per user per day</code>. Split those actions by the read/write ratio to estimate daily reads and writes.</p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>average QPS ≈ requests/day ÷ 86,400
-</code></pre></div></div>
+<pre><code class="language-text">average QPS ≈ requests/day ÷ 86,400
+</code></pre>
 
-<p>For quick mental math, <code class="highlighter-rouge">requests/day ÷ 100,000</code> is a close approximation. Apply it separately to reads and writes. This assumes actions roughly correspond to requests; account for extra service calls or fan-out when the design requires them.</p>
+<p>For quick mental math, <code>requests/day ÷ 100,000</code> is a close approximation. Apply it separately to reads and writes. This assumes actions roughly correspond to requests; account for extra service calls or fan-out when the design requires them.</p>
 
 <h2 id="from-workload-mix-to-design-decisions">From workload mix to design decisions</h2>
 
@@ -125,17 +125,48 @@
 
 <h1 id="2-traffic-shape">2. Traffic shape</h1>
 
-<p>Ask about peak factor, burstiness, and hot spots or skew. If no traffic shape is given, assume a peak around <code class="highlighter-rouge">3×</code> average as a starting point.</p>
+<p>Ask about peak factor, burstiness, and hot spots or skew. If no traffic shape is given, assume a peak around <code>3×</code> average as a starting point.</p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>peak read QPS  = average read QPS × peak factor
+<pre><code class="language-text">peak read QPS  = average read QPS × peak factor
 peak write QPS = average write QPS × peak factor
-</code></pre></div></div>
+</code></pre>
 
 <p>The same peak factor may not fit every workload. A flash crowd, scheduled job, or a few very popular keys can create short bursts or hot spots beyond the average peak estimate.</p>
+
+<h2 id="high-or-bursty-traffic">High or bursty traffic</h2>
+
+<p>Use the peak estimates and traffic pattern to decide how the service handles load:</p>
+
+<ul>
+  <li>A <strong>load balancer</strong> spreads incoming requests across multiple service instances.</li>
+  <li><strong>Horizontal autoscaling</strong> adds or removes instances as load changes. In Kubernetes, this usually means scaling the number of pods with the Horizontal Pod Autoscaler (HPA). This is horizontal scaling.</li>
+  <li>A <strong>queue</strong> can absorb spikes and smooth the workload when processing can happen asynchronously. It buffers work; workers still need enough capacity to drain the queue.</li>
+</ul>
 
 <h1 id="3-latency">3. Latency</h1>
 
 <p>Ask for the target latency and whether p95 or p99 matters. For normal interactive requests, a reasonable starting assumption is roughly <strong>under 200 ms</strong>. Tail latency targets matter when a slow request can hold up a user action or a larger request assembled from many services.</p>
+
+<h2 id="low-latency">Low latency</h2>
+
+<p>When latency is a key requirement, look for repeated work, distant dependencies, and work that does not need to finish before responding:</p>
+
+<ul>
+  <li>Use a <strong>cache</strong> to avoid repeated database reads or computation.</li>
+  <li>Use a <strong>CDN</strong> to serve content closer to users.</li>
+  <li>Keep utilization below saturation. High utilization causes queues to build up, which can sharply increase p95 and p99 latency.</li>
+  <li>Reduce cross-region calls:
+    <ul>
+      <li>Route users to the nearest region.</li>
+      <li>Replicate read data locally.</li>
+      <li>Keep dependent services in the same region.</li>
+      <li>Use regional caches.</li>
+      <li>Avoid synchronous cross-region calls on the critical path.</li>
+    </ul>
+  </li>
+  <li><strong>Precompute</strong> expensive results when possible.</li>
+  <li>Move non-critical work to <strong>asynchronous processing</strong>.</li>
+</ul>
 
 <h1 id="4-availability">4. Availability</h1>
 
@@ -168,9 +199,9 @@ peak write QPS = average write QPS × peak factor
   <li>Video: estimate from the problem’s requirements</li>
 </ul>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>storage growth/day = writes/day × bytes per write
+<pre><code class="language-text">storage growth/day = writes/day × bytes per write
 bandwidth          = QPS × payload size
-</code></pre></div></div>
+</code></pre>
 
 <p>Use consistent units and distinguish stored data from replicated copies, indexes, and backups when estimating total capacity. For large payloads, estimate reads and writes separately if their rates or payload sizes differ.</p>
 
@@ -194,7 +225,6 @@ bandwidth          = QPS × payload size
 </blockquote>
 
 <p>Then split actions into reads and writes using an explicit ratio before deriving QPS and storage growth.</p>
-
   </div>
 
   
