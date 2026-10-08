@@ -59,7 +59,7 @@
 </header>
 
 <article class="article">
-  <p class="article-meta">2026.10.07 · 5 min</p>
+  <p class="article-meta">2026.10.07 · 6 min</p>
   <h1 class="article-title">[SD] System Design Template: 2. NFR + Estimation</h1>
   
     
@@ -185,6 +185,23 @@ peak write QPS = average write QPS × peak factor
 
 <p>Choose based on what incorrect or stale results mean for the product.</p>
 
+<h2 id="strong-consistency">Strong consistency</h2>
+
+<ul>
+  <li>Reads must observe the latest committed state.</li>
+  <li>Read from the primary or a replica guaranteed to be caught up.</li>
+  <li>This may require synchronous or quorum replication, or coordination to provide read-after-write behavior.</li>
+  <li>Coordination can increase latency and reduce availability during failures or network partitions.</li>
+</ul>
+
+<h2 id="eventual-consistency">Eventual consistency</h2>
+
+<ul>
+  <li>Reads can be served from replicas immediately, with asynchronous replication.</li>
+  <li>This can improve latency and availability.</li>
+  <li>Temporary stale reads are acceptable while replicas catch up.</li>
+</ul>
+
 <h1 id="6-geography">6. Geography</h1>
 
 <p>Ask whether the system serves one region or users around the world, and whether it needs low latency worldwide. These answers inform CDN use, multi-region deployment, and the replication strategy.</p>
@@ -204,6 +221,32 @@ bandwidth          = QPS × payload size
 </code></pre>
 
 <p>Use consistent units and distinguish stored data from replicated copies, indexes, and backups when estimating total capacity. For large payloads, estimate reads and writes separately if their rates or payload sizes differ.</p>
+
+<h1 id="8-storage-choice">8. Storage choice</h1>
+
+<p>Choose storage mainly from the access patterns and consistency or transaction needs, then check that it can meet the expected scale.</p>
+
+<ul>
+  <li>Need joins, transactions, constraints, or flexible querying → a relational database such as <strong>Postgres</strong> or <strong>MySQL</strong>.</li>
+  <li>Simple key-based access, very large scale, and straightforward partitioning → a NoSQL store such as <strong>DynamoDB</strong> or <strong>Cassandra</strong>.</li>
+  <li>Very write-heavy or append-heavy workload with predictable partition-key queries → <strong>Cassandra</strong> or <strong>ScyllaDB</strong>.</li>
+  <li>Document-shaped data with an evolving schema → <strong>MongoDB</strong>.</li>
+  <li>Graph traversals are a core query pattern → a <strong>graph database</strong>.</li>
+  <li>Time-series metrics or events → a <strong>time-series database</strong>.</li>
+  <li>Large blobs or media → <strong>object storage</strong>, rather than a conventional database.</li>
+</ul>
+
+<p>Before choosing, ask:</p>
+
+<ul>
+  <li>Do I need strong consistency or transactions?</li>
+  <li>What are the query patterns?</li>
+  <li>How large is the dataset?</li>
+  <li>What are the read and write QPS?</li>
+  <li>Can the data be cleanly partitioned?</li>
+  <li>Do I need secondary indexes or ad-hoc queries?</li>
+  <li>Is schema flexibility important?</li>
+</ul>
 
 <h1 id="what-to-carry-forward">What to carry forward</h1>
 
