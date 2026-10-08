@@ -28,6 +28,30 @@ average QPS ≈ requests/day ÷ 86,400
 
 For quick mental math, `requests/day ÷ 100,000` is a close approximation. Apply it separately to reads and writes. This assumes actions roughly correspond to requests; account for extra service calls or fan-out when the design requires them.
 
+## From workload mix to design decisions
+
+Use the read/write estimates to identify the likely capacity bottleneck, then choose a design that addresses it.
+
+### Read-heavy workloads
+
+- Add a **cache** to serve repeated reads without reaching the database.
+- Add **read replicas** to spread database reads across more nodes.
+- Use a **CDN** for static, cacheable, or media content that can be served near users.
+- **Horizontal sharding** can increase aggregate read capacity too, but usually isn't the first choice when reads are the only bottleneck.
+
+### Write-heavy workloads
+
+- Use **horizontal sharding** to spread writes and storage across partitions when one database can no longer handle the load.
+- Use **queues or batching** when writes can be processed asynchronously, smoothing bursts and reducing per-write overhead.
+- For very high append-heavy throughput, consider write-optimized stores such as **Cassandra** or **ScyllaDB**. These use an LSM-based design: writes go to a write-ahead log (WAL) and an in-memory memtable, then flush to disk in large sequential batches. This minimizes random disk access and improves write throughput.
+
+### Rule of thumb
+
+- Read bottleneck → cache or read replicas
+- Write or storage bottleneck → horizontal sharding
+- Bursty asynchronous writes → queue or batch
+- Very high append-heavy write throughput → LSM-based store
+
 # 2. Traffic shape
 
 Ask about peak factor, burstiness, and hot spots or skew. If no traffic shape is given, assume a peak around `3×` average as a starting point.
