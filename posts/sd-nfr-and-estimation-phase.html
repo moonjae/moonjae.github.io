@@ -59,7 +59,7 @@
 </header>
 
 <article class="article">
-  <p class="article-meta">2026.10.07 · 6 min</p>
+  <p class="article-meta">2026.10.07 · 3 min</p>
   <h1 class="article-title">[SD] System Design Template: 2. NFR + Estimation</h1>
   
     
@@ -70,187 +70,96 @@
   <div class="prose">
 <h1 id="step-2-nfr--estimation">Step 2: NFR + estimation</h1>
 
-<p>After defining the <strong>functional requirements</strong>—what the system must do—identify its non-functional requirements (NFRs), such as scale, latency, availability, consistency, and geographic reach. Then turn those requirements into capacity estimates.</p>
-
-<h2 id="why-estimate-early">Why estimate early?</h2>
-
-<p>Before choosing an architecture, translate the product requirements into a small set of capacity targets. These estimates help guide decisions about storage, caching, replication, and geographic deployment.</p>
+<p>After defining the <strong>functional requirements</strong> (what the system does), estimate its non-functional requirements (NFRs) to guide storage, caching, replication, and deployment choices.</p>
 
 <h1 id="1-scale">1. Scale</h1>
 
-<p>Ask for, or make explicit assumptions about:</p>
-
-<ul>
-  <li>Daily active users (DAU)</li>
-  <li>Relevant actions per user per day</li>
-  <li>Read/write ratio</li>
-</ul>
-
-<p>Let <code>actions/day = DAU × actions per user per day</code>. Split those actions by the read/write ratio to estimate daily reads and writes.</p>
+<p>Estimate daily active users (DAU), relevant actions per user per day, and the read/write ratio. Then split <code>actions/day = DAU × actions per user per day</code> into daily reads and writes.</p>
 
 <pre><code class="language-text">average QPS ≈ requests/day ÷ 86,400
 </code></pre>
 
-<p>For quick mental math, <code>requests/day ÷ 100,000</code> is a close approximation. Apply it separately to reads and writes. This assumes actions roughly correspond to requests; account for extra service calls or fan-out when the design requires them.</p>
+<p>For mental math, <code>requests/day ÷ 100,000</code> approximates QPS. Apply it to reads and writes separately. This assumes actions roughly map to requests; account for service fan-out when relevant.</p>
 
 <h2 id="from-workload-mix-to-design-decisions">From workload mix to design decisions</h2>
 
-<p>Use the read/write estimates to identify the likely capacity bottleneck, then choose a design that addresses it.</p>
-
-<h3 id="read-heavy-workloads">Read-heavy workloads</h3>
+<p>Match the design to the bottleneck:</p>
 
 <ul>
-  <li>Add a <strong>cache</strong> to serve repeated reads without reaching the database.</li>
-  <li>Add <strong>read replicas</strong> to spread database reads across more nodes.</li>
-  <li>Use a <strong>CDN</strong> for static, cacheable, or media content that can be served near users.</li>
-  <li><strong>Horizontal sharding</strong> can increase aggregate read capacity too, but usually isn’t the first choice when reads are the only bottleneck.</li>
+  <li><strong>Read-heavy:</strong> cache repeated reads, add read replicas, and use a CDN for static, cacheable, or media content. Sharding also raises aggregate read capacity, but usually isn't the first fix for a read-only bottleneck.</li>
+  <li><strong>Write-heavy or storage-bound:</strong> horizontally shard to spread writes and data across partitions.</li>
+  <li><strong>Bursty async writes:</strong> queue or batch to smooth bursts and reduce per-write overhead.</li>
+  <li><strong>Huge append-heavy throughput:</strong> consider Cassandra or ScyllaDB. Their LSM design writes to a WAL and in-memory memtable, then flushes large sequential batches to disk, minimizing random I/O and improving throughput.</li>
 </ul>
 
-<h3 id="write-heavy-workloads">Write-heavy workloads</h3>
-
-<ul>
-  <li>Use <strong>horizontal sharding</strong> to spread writes and storage across partitions when one database can no longer handle the load.</li>
-  <li>Use <strong>queues or batching</strong> when writes can be processed asynchronously, smoothing bursts and reducing per-write overhead.</li>
-  <li>For very high append-heavy throughput, consider write-optimized stores such as <strong>Cassandra</strong> or <strong>ScyllaDB</strong>. These use an LSM-based design: writes go to a write-ahead log (WAL) and an in-memory memtable, then flush to disk in large sequential batches. This minimizes random disk access and improves write throughput.</li>
-</ul>
-
-<h3 id="rule-of-thumb">Rule of thumb</h3>
-
-<ul>
-  <li>Read bottleneck → cache or read replicas</li>
-  <li>Write or storage bottleneck → horizontal sharding</li>
-  <li>Bursty asynchronous writes → queue or batch</li>
-  <li>Very high append-heavy write throughput → LSM-based store</li>
-</ul>
+<p>Rule of thumb: reads → cache/replicas; writes or storage → sharding; bursty async writes → queue/batch; huge append-heavy writes → LSM store.</p>
 
 <h1 id="2-traffic-shape">2. Traffic shape</h1>
 
-<p>Ask about peak factor, burstiness, and hot spots or skew. If no traffic shape is given, assume a peak around <code>3×</code> average as a starting point.</p>
+<p>Estimate peak factor, burstiness, and hotspots/skew. Default to a <code>3×</code> average peak when unspecified.</p>
 
 <pre><code class="language-text">peak read QPS  = average read QPS × peak factor
 peak write QPS = average write QPS × peak factor
 </code></pre>
 
-<p>The same peak factor may not fit every workload. A flash crowd, scheduled job, or a few very popular keys can create short bursts or hot spots beyond the average peak estimate.</p>
+<p>Flash crowds, scheduled jobs, or popular keys can create bursts/hotspots beyond that estimate.</p>
 
 <h2 id="high-or-bursty-traffic">High or bursty traffic</h2>
 
-<p>Use the peak estimates and traffic pattern to decide how the service handles load:</p>
-
-<ul>
-  <li>A <strong>load balancer</strong> spreads incoming requests across multiple service instances.</li>
-  <li><strong>Horizontal autoscaling</strong> adds or removes instances as load changes. In Kubernetes, this usually means scaling the number of pods with the Horizontal Pod Autoscaler (HPA). This is horizontal scaling.</li>
-  <li>A <strong>queue</strong> can absorb spikes and smooth the workload when processing can happen asynchronously. It buffers work; workers still need enough capacity to drain the queue.</li>
-</ul>
+<p>For high or bursty traffic, a <strong>load balancer</strong> spreads requests across service instances; <strong>horizontal autoscaling</strong> adds/removes instances (typically pods via Kubernetes HPA); and a <strong>queue</strong> buffers async work. Ensure workers can drain the queue.</p>
 
 <h1 id="3-latency">3. Latency</h1>
 
-<p>Ask for the target latency and whether p95 or p99 matters. For normal interactive requests, a reasonable starting assumption is roughly <strong>under 200 ms</strong>. Tail latency targets matter when a slow request can hold up a user action or a larger request assembled from many services.</p>
+<p>Ask for the target and whether p95/p99 matters. Assume roughly <strong>under 200 ms</strong> for normal interactive requests; tail latency matters when slow calls hold up users or fan-out requests.</p>
 
 <h2 id="low-latency">Low latency</h2>
 
-<p>When latency is a key requirement, look for repeated work, distant dependencies, and work that does not need to finish before responding:</p>
-
-<ul>
-  <li>Use a <strong>cache</strong> to avoid repeated database reads or computation.</li>
-  <li>Use a <strong>CDN</strong> to serve content closer to users.</li>
-  <li>Keep utilization below saturation. High utilization causes queues to build up, which can sharply increase p95 and p99 latency.</li>
-  <li>Reduce cross-region calls:
-    <ul>
-      <li>Route users to the nearest region.</li>
-      <li>Replicate read data locally.</li>
-      <li>Keep dependent services in the same region.</li>
-      <li>Use regional caches.</li>
-      <li>Avoid synchronous cross-region calls on the critical path.</li>
-    </ul>
-  </li>
-  <li><strong>Precompute</strong> expensive results when possible.</li>
-  <li>Move non-critical work to <strong>asynchronous processing</strong>.</li>
-</ul>
+<p>Reduce repeated or distant work: cache database reads/computation; use a CDN; precompute expensive results; and move non-critical work async. Keep utilization below saturation to avoid queue buildup and p95/p99 spikes. Reduce cross-region calls by routing users to the nearest region, replicating read data locally, keeping dependent services together, using regional caches, and avoiding synchronous cross-region calls on the critical path.</p>
 
 <h1 id="4-availability">4. Availability</h1>
 
-<p>Ask what availability target the system needs. If unspecified, start with <strong>99.9%</strong> and clarify whether the target applies to the whole system or a particular user-facing operation.</p>
-
-<p>The target can influence replication, failover, and whether the system needs to run across multiple availability zones (multi-AZ).</p>
+<p>Ask for the target (default <strong>99.9%</strong>) and its scope: whole system or user-facing operation. It affects replication, failover, and multi-AZ deployment.</p>
 
 <h1 id="5-consistency">5. Consistency</h1>
 
-<p>Ask whether reads must see the latest write (strong consistency) or can lag (eventual consistency).</p>
+<p>Ask whether reads must see the latest committed write. Balances, payments, inventory, and uniqueness usually need <strong>strong consistency</strong>; feeds, likes, and analytics often tolerate <strong>eventual consistency</strong>. Choose based on the cost of stale results.</p>
 
 <ul>
-  <li>Balances, payments, inventory, and uniqueness usually need stronger consistency.</li>
-  <li>Feeds, likes, and analytics can often tolerate eventual consistency.</li>
-</ul>
-
-<p>Choose based on what incorrect or stale results mean for the product.</p>
-
-<h2 id="strong-consistency">Strong consistency</h2>
-
-<ul>
-  <li>Reads must observe the latest committed state.</li>
-  <li>Read from the primary or a replica guaranteed to be caught up.</li>
-  <li>This may require synchronous or quorum replication, or coordination to provide read-after-write behavior.</li>
-  <li>Coordination can increase latency and reduce availability during failures or network partitions.</li>
-</ul>
-
-<h2 id="eventual-consistency">Eventual consistency</h2>
-
-<ul>
-  <li>Reads can be served from replicas immediately, with asynchronous replication.</li>
-  <li>This can improve latency and availability.</li>
-  <li>Temporary stale reads are acceptable while replicas catch up.</li>
+  <li><strong>Strong:</strong> read from the primary or a guaranteed caught-up replica; synchronous/quorum replication or read-after-write coordination may be needed. This raises latency and can reduce availability during failures or partitions.</li>
+  <li><strong>Eventual:</strong> serve replica reads with asynchronous replication for better latency/availability, accepting temporary stale reads.</li>
 </ul>
 
 <h1 id="6-geography">6. Geography</h1>
 
-<p>Ask whether the system serves one region or users around the world, and whether it needs low latency worldwide. These answers inform CDN use, multi-region deployment, and the replication strategy.</p>
+<p>Ask whether users are regional or global and need low latency worldwide. This informs CDN use, multi-region deployment, and replication strategy.</p>
 
 <h1 id="7-data-size">7. Data size</h1>
 
-<p>Ask for record size, request and response payload sizes, and media size when relevant. If no values are given, useful starting assumptions are:</p>
-
-<ul>
-  <li>Metadata record: about <strong>1 KB</strong></li>
-  <li>Image: about <strong>1–5 MB</strong></li>
-  <li>Video: estimate from the problem’s requirements</li>
-</ul>
+<p>Estimate record, request/response, and relevant media sizes. Defaults: metadata <strong>~1 KB</strong>, image <strong>~1–5 MB</strong>; estimate video from requirements.</p>
 
 <pre><code class="language-text">storage growth/day = writes/day × bytes per write
 bandwidth          = QPS × payload size
 </code></pre>
 
-<p>Use consistent units and distinguish stored data from replicated copies, indexes, and backups when estimating total capacity. For large payloads, estimate reads and writes separately if their rates or payload sizes differ.</p>
+<p>Use consistent units; account separately for replicas, indexes, and backups. For large payloads, estimate read and write bandwidth separately when rates or sizes differ.</p>
 
 <h1 id="8-storage-choice">8. Storage choice</h1>
 
-<p>Choose storage mainly from the access patterns and consistency or transaction needs, then check that it can meet the expected scale.</p>
+<p>Choose primarily by access pattern and consistency/transaction needs, then check scale:</p>
 
 <ul>
-  <li>Need joins, transactions, constraints, or flexible querying → a relational database such as <strong>Postgres</strong> or <strong>MySQL</strong>.</li>
-  <li>Simple key-based access, very large scale, and straightforward partitioning → a NoSQL store such as <strong>DynamoDB</strong> or <strong>Cassandra</strong>.</li>
-  <li>Very write-heavy or append-heavy workload with predictable partition-key queries → <strong>Cassandra</strong> or <strong>ScyllaDB</strong>.</li>
-  <li>Document-shaped data with an evolving schema → <strong>MongoDB</strong>.</li>
-  <li>Graph traversals are a core query pattern → a <strong>graph database</strong>.</li>
-  <li>Time-series metrics or events → a <strong>time-series database</strong>.</li>
-  <li>Large blobs or media → <strong>object storage</strong>, rather than a conventional database.</li>
+  <li>Joins, transactions, constraints, flexible queries → relational DB (<strong>Postgres</strong>, <strong>MySQL</strong>).</li>
+  <li>Simple key access, huge scale, easy partitioning → NoSQL (<strong>DynamoDB</strong>, <strong>Cassandra</strong>).</li>
+  <li>Very write/append-heavy, predictable partition-key queries → <strong>Cassandra</strong> or <strong>ScyllaDB</strong>.</li>
+  <li>Evolving document schema → <strong>MongoDB</strong>; core graph traversals → graph DB; time-series metrics/events → time-series DB.</li>
+  <li>Large blobs/media → object storage, not a conventional DB.</li>
 </ul>
 
-<p>Before choosing, ask:</p>
-
-<ul>
-  <li>Do I need strong consistency or transactions?</li>
-  <li>What are the query patterns?</li>
-  <li>How large is the dataset?</li>
-  <li>What are the read and write QPS?</li>
-  <li>Can the data be cleanly partitioned?</li>
-  <li>Do I need secondary indexes or ad-hoc queries?</li>
-  <li>Is schema flexibility important?</li>
-</ul>
+<p>Check consistency/transactions, query patterns, dataset size, read/write QPS, partitionability, secondary indexes/ad-hoc queries, and schema flexibility.</p>
 
 <h1 id="what-to-carry-forward">What to carry forward</h1>
 
-<p>Most designs only need these headline estimates:</p>
+<p>Carry forward these headline estimates:</p>
 
 <ul>
   <li>Average read QPS</li>
@@ -261,13 +170,13 @@ bandwidth          = QPS × payload size
   <li>Bandwidth, when payloads are large</li>
 </ul>
 
-<p>If the interviewer gives no numbers, state assumptions clearly. For a large consumer system, one possible starting point is:</p>
+<p>If unspecified, state assumptions. One large-consumer starting point:</p>
 
 <blockquote>
-  <p>I’ll assume 100M DAU, roughly 10 relevant actions per user per day, a 3× peak factor, and around 1 KB per metadata record.</p>
+  <p>I'll assume 100M DAU, roughly 10 relevant actions per user per day, a 3× peak factor, and around 1 KB per metadata record.</p>
 </blockquote>
 
-<p>Then split actions into reads and writes using an explicit ratio before deriving QPS and storage growth.</p>
+<p>Split actions by an explicit read/write ratio before deriving QPS and storage growth.</p>
   </div>
 
   
