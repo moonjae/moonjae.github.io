@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[ALGO][DS] Dijkstra vs Prims — Jae Moon</title>
+  
+  
+  <meta name="description" content="Dijkstra vs Prims">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[ALGO][DS] Dijkstra vs Prims">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/algo-ds-dijkstra-vs-prims">
+  <meta property="og:description" content="Dijkstra vs Prims">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/algo-ds-dijkstra-vs-prims">
+  <meta name="twitter:title" content="[ALGO][DS] Dijkstra vs Prims">
+  <meta name="twitter:description" content="Dijkstra vs Prims">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=algo" class="post-header-tag invert-hover" title="See all posts tagged Algo">
+      <span class="tag">Algo</span>
+    </a>
+  
+    <a href="/#tag=ds" class="post-header-tag invert-hover" title="See all posts tagged DS">
+      <span class="tag">DS</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2023.05.17 · 3 min</p>
+  <h1 class="article-title">[ALGO][DS] Dijkstra vs Prims</h1>
+  
+    
+      <p class="article-description">Dijkstra vs Prims</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="similarities-and-differences">Similarities and Differences</h1>
+
+<p>Similarities</p>
+
+<ul>
+  <li>They both use greedy approach Differences</li>
+  <li>Dijkstra is used for shortedst path problem while Prims is used for MST</li>
+  <li>They only differ in vertex relaxation method</li>
+</ul>
+
+<h1 id="template">Template</h1>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">dijkstra</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">src</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dst</span><span class="p">,</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;&amp;</span> <span class="n">adj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">);</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">src</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">src</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        
+        <span class="c1">// - cur[1] represents the min cost to reach cur[0]</span>
+        <span class="c1">// - there cannot be a cost that is smaller than current cost</span>
+        <span class="c1">// later in the loop</span>
+        <span class="c1">// - you can technically check if c[0] == dst and return here</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">neighbor</span><span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]]});</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">cost</span><span class="p">[</span><span class="n">dst</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">prims</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;&amp;</span> <span class="n">adj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">pq</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">visited</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cost</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">INT_MAX</span><span class="p">);</span>
+
+    <span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">});</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">visited</span><span class="p">[</span><span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="n">visited</span><span class="p">[</span><span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="c1">// collect answer here</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nei</span><span class="o">:</span> <span class="n">adj</span><span class="p">[</span><span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">nei</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">nei</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">cost</span><span class="p">[</span><span class="n">nei</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">nei</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="n">nei</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">nei</span><span class="p">[</span><span class="mi">0</span><span class="p">]]});</span>
+<span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/algo-ds-dijkstra-and-bellmanford" title="[ALGO][DS] Dijkstra and Bellman-Ford">&larr; Older</a>
+      
+      
+        <a href="/posts/algo-ds-eulerian-path-cycle" title="[ALGO][DS] Eulerian Path/Cycle">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

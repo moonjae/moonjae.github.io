@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[LC] 2488. Count Subarrays With Median K — Jae Moon</title>
+  
+  
+  <meta name="description" content="https://leetcode.com/problems/count-subarrays-with-median-k/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 2488. Count Subarrays With Median K">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/lc-count-subarrays-with-median-k">
+  <meta property="og:description" content="https://leetcode.com/problems/count-subarrays-with-median-k/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/lc-count-subarrays-with-median-k">
+  <meta name="twitter:title" content="[LC] 2488. Count Subarrays With Median K">
+  <meta name="twitter:description" content="https://leetcode.com/problems/count-subarrays-with-median-k/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=balance" class="post-header-tag invert-hover" title="See all posts tagged Balance">
+      <span class="tag">Balance</span>
+    </a>
+  
+    <a href="/#tag=prefix" class="post-header-tag invert-hover" title="See all posts tagged Prefix">
+      <span class="tag">Prefix</span>
+    </a>
+  
+    <a href="/#tag=hashmap" class="post-header-tag invert-hover" title="See all posts tagged Hashmap">
+      <span class="tag">Hashmap</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.11.27 · 3 min</p>
+  <h1 class="article-title">[LC] 2488. Count Subarrays With Median K</h1>
+  
+    
+      <p class="article-description"><a href="https://leetcode.com/problems/count-subarrays-with-median-k/description/" rel="noreferrer noopener" target="_blank">https://leetcode.com/problems/count-subarrays-with-median-k/description/</a></p>
+    
+  
+
+  <div class="prose">
+    <h1 id="problem-statement">Problem Statement</h1>
+<p>You are given an array nums of size n consisting of distinct integers from 1 to n and a positive integer k.
+Return the number of non-empty subarrays in nums that have a median equal to k.</p>
+
+<p>Note:
+The median of an array is the middle element after sorting the array in ascending order. If the array is of even length, the median is the left middle element.
+For example, the median of [2,3,1,4] is 2, and the median of [8,4,3,5,1] is 4.
+A subarray is a contiguous part of an array.</p>
+
+<p>Example 1:
+Input: nums = [3,2,1,4,5], k = 4
+Output: 3
+Explanation: The subarrays that have a median equal to 4 are: [4], [4,5] and [1,4,5].</p>
+
+<h1 id="intuition">Intuition</h1>
+<p>There are two cases where k becomes median
+-no of smaller numbers is equal to no of larger numbers (when size of the subarray is odd)
+-no of larger numbers + 1 is equal to no of smaller numbers (when size of the subarray is even)</p>
+
+<h1 id="approach">Approach</h1>
+<p>Balance / Prefix / Hashmap</p>
+<ol>
+  <li>look where k is located in the given array</li>
+  <li>iterate towards the left starting from k and try to record the rolling balance</li>
+  <li>record the frequency of the balance in a hashmap</li>
+  <li>now, iterate from k towards the right side</li>
+  <li>record the rolling balance again this time</li>
+  <li>check if -rolling balance and -rolling balance + 1 exist in the hashmap, if they do, add both of them to the answer</li>
+</ol>
+
+<h1 id="complexity">Complexity</h1>
+<ul>
+  <li>Time complexity: O(n)</li>
+  <li>Space complexity: O(n)</li>
+</ul>
+
+<h1 id="code">Code</h1>
+<ul>
+  <li>initial submission O(n^2)
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int countSubarrays(vector&lt;int&gt;&amp; nums, int k) {
+      int k_index;
+      int n = nums.size();
+      for (int i = 0; i &lt; n; ++i) {
+          if (nums[i] == k) {
+              k_index = i;
+              break;
+          }
+      }
+      vector&lt;pair&lt;int,int&gt;&gt; prefix_left(n, {0,0});
+      vector&lt;pair&lt;int,int&gt;&gt; prefix_right(n, {0,0});
+      for (int i = k_index - 1; i &gt;= 0; --i) {
+          prefix_left[i] = prefix_left[i + 1];
+          if (nums[i] &gt; k) {
+              prefix_left[i].second++;
+          }
+          else {
+              prefix_left[i].first++;
+          }
+      }
+      for (int i = k_index + 1; i &lt; n; ++i) {
+          prefix_right[i] = prefix_right[i - 1];
+          if (nums[i] &gt; k) {
+              prefix_right[i].second++;
+          }
+          else {
+              prefix_right[i].first++;
+          }
+      }
+      int cnt = 0;
+      for (int l = k_index; l &gt;= 0; --l) {
+          for (int r = k_index; r &lt; n; ++r) {
+              int size = r - l + 1;
+              int smaller = prefix_left[l].first + prefix_right[r].first;
+              int larger = prefix_left[l].second + prefix_right[r].second;
+              if (size % 2) {
+                  if (smaller == larger) ++cnt;
+              }
+              else {
+                  if (smaller + 1 == larger) ++cnt;
+              }
+          }
+      }
+      return cnt;
+  }
+</code></pre></div>    </div>
+  </li>
+  <li>final submission O(n)
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  int countSubarrays(vector&lt;int&gt;&amp; nums, int k) {
+      int k_index;
+      int n = nums.size();
+      for (int i = 0; i &lt; n; ++i) {
+          if (nums[i] == k) {
+              k_index = i;
+              break;
+          }
+      }
+      unordered_map&lt;int, int&gt; cnt;
+      int answer = 0;
+      int cur = 0;
+      for (int i = k_index; i &gt;= 0; --i) {
+          cur += (nums[i] == k) ? 0 : (nums[i] &lt; k) ? -1 : 1;
+          ++cnt[cur];
+      }
+      cur = 0;
+      for (int i = k_index; i &lt; n; ++i) {
+          cur += (nums[i] == k) ? 0 : (nums[i] &lt; k) ? -1 : 1;
+          answer += cnt[-cur] + cnt[-cur + 1];
+      }
+
+      return answer;
+  }
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="take-away">Take Away</h1>
+<ul>
+  <li>when the problem related to + / - or left / right, consider using balance</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-minimum-fuel-cost-to-report-to-the-capital" title="[LC] 2477. Minimum Fuel Cost to Report to the Capital">&larr; Older</a>
+      
+      
+        <a href="/posts/math-karatsuba-multiplication" title="[Math] Karatsuba Multiplication">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

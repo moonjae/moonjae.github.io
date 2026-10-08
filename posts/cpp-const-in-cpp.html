@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[CPP] Const in C++ — Jae Moon</title>
+  
+  
+  <meta name="description" content="Const in C++">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CPP] Const in C++">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/cpp-const-in-cpp">
+  <meta property="og:description" content="Const in C++">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/cpp-const-in-cpp">
+  <meta name="twitter:title" content="[CPP] Const in C++">
+  <meta name="twitter:description" content="Const in C++">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=cpp" class="post-header-tag invert-hover" title="See all posts tagged CPP">
+      <span class="tag">CPP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2023.01.25 · 2 min</p>
+  <h1 class="article-title">[CPP] Const in C++</h1>
+  
+    
+      <p class="article-description">Const in C++</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="const">Const</h1>
+<h3 id="what-does-const-mean">What does const mean</h3>
+<ul>
+  <li>Const keywords basically suggests that the variables associated with that keyword are intended for read-only access</li>
+  <li>This implies that const is different from immutability because immutability means that the variables can never be changed while const variables are intended for read access.</li>
+  <li>ex) const int a = b Basically ‘a’ cannot be used to modify its value ‘b’</li>
+</ul>
+
+<p>Here we can see, variable ‘a’ which is declared as const, is actually modified</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const int a = 3;
+const int * b = &amp;a;
+*const_cast&lt;int*&gt;b = 4; 
+</code></pre></div></div>
+
+<p>A pointer-to-const can point to a non-const object. What the pointer-to-const tells us is that we can’t use ‘b’ to modify the value of ‘a’</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int a = 3;
+const int * b = &amp;a;
+*const_cast&lt;int*&gt;b = 4; 
+</code></pre></div></div>
+
+<p>Below is considered illegal because the compiler does not allow you to create a non-const-pointer pointing to a const object since ‘a’ cannot be dereferenced and pointed by a non-const-pointer</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const int a = 3; 
+int * b = &amp;a; // illegal 
+</code></pre></div></div>
+
+<h3 id="pointer-to-const-object-vs-const-pointer-to-object">pointer-to-const-object vs const-pointer-to-object</h3>
+<ul>
+  <li>try to read from right to left</li>
+  <li>const int * a (pointer-to-const-object)
+    <ul>
+      <li>What the pointer is pointing to a read-only but it can be replaced to another pointer</li>
+    </ul>
+  </li>
+  <li>int * const a (const-pointer-to-object)
+    <ul>
+      <li>The value can be modified but the pointer cannot be replaced with another pointer</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="const-inside-class">Const inside class</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Test{
+    public:
+    int a;
+    void helper() { cout &lt;&lt; a; }
+};
+
+Test a = {1};
+a.helper(); // legal
+
+const Test b = {1};
+b.helper(); // illegal because the helper function can modify the member variables 
+</code></pre></div></div>
+
+<p>Therefore for cases above we need add const keywords to methods in order to represent that we do not intend to modify any member variables</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void helper() const { cout &lt;&lt; a; }
+</code></pre></div></div>
+
+<p>However there can be situations where we do need to modify one or more variables in that case we can use mutable keyword to the member variable we wish to modify</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mutable int a; 
+</code></pre></div></div>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>Const: https://www.youtube.com/watch?v=4fJBrditnJU&amp;list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&amp;index=33</li>
+  <li>Mutable: https://www.youtube.com/watch?v=bP9z3H3cVMY&amp;list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&amp;index=35&amp;t=279s</li>
+  <li>immutability and const: https://softwareengineering.stackexchange.com/questions/149555/difference-between-immutable-and-const</li>
+  <li>https://stackoverflow.com/questions/13061450/pointer-to-const-can-point-to-non-const-object-language-design-or-technical-re</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/cpp-how-cpp-works" title="[CPP] How C++ works">&larr; Older</a>
+      
+      
+        <a href="/posts/cpp-variadic-template" title="[CPP] Variadic Template">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

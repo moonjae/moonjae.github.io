@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[LC] 52. N-Queens II — Jae Moon</title>
+  
+  
+  <meta name="description" content="https://leetcode.com/problems/n-queens-ii/description/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[LC] 52. N-Queens II">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/lc-n-queens-ii">
+  <meta property="og:description" content="https://leetcode.com/problems/n-queens-ii/description/">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/lc-n-queens-ii">
+  <meta name="twitter:title" content="[LC] 52. N-Queens II">
+  <meta name="twitter:description" content="https://leetcode.com/problems/n-queens-ii/description/">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=backtracking" class="post-header-tag invert-hover" title="See all posts tagged Backtracking">
+      <span class="tag">Backtracking</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.12.02 · 3 min</p>
+  <h1 class="article-title">[LC] 52. N-Queens II</h1>
+  
+    
+      <p class="article-description"><a href="https://leetcode.com/problems/n-queens-ii/description/" rel="noreferrer noopener" target="_blank">https://leetcode.com/problems/n-queens-ii/description/</a></p>
+    
+  
+
+  <div class="prose">
+    <h1 id="problem-statement">Problem Statement</h1>
+<p>The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.</p>
+
+<p>Given an integer n, return the number of distinct solutions to the n-queens puzzle.</p>
+
+<p>Example 1:
+<img src="https://assets.leetcode.com/uploads/2020/11/13/queens.jpg" alt="" />
+Input: n = 4
+Output: 2
+Explanation: There are two distinct solutions to the 4-queens puzzle as shown.</p>
+
+<h1 id="intuition">Intuition</h1>
+<ul>
+  <li>Because we have to place N queens, we need to place at least one queen at each row. If we do not this, this will lead another row to have two queens which should be avoided</li>
+  <li>Using the information above we can use recursion to get all the possible combinations. Now we need to figure out how we know if a queen at the given row does not interfere with other queens in the previous rows</li>
+  <li>There are 3 ways a queen can advance; vertical, horizontal, diagonal. But using 1. we are making sure that none of other queens are on the same horizontal line.</li>
+  <li>To check vertical lines, we can just add a datastructure (vector/set) that keeps track of all the column values of queens that have already been placed</li>
+  <li>We are left with diagonal and antidiagonal.
+    <ul>
+      <li>For diagonal, let’s say a queen was placed in col 3 in the previous row and we are checking for col 2 for the current row. We can see that while row has increased, col has decreased. For it to create a diagonal line, the value of col + row needs to stay the same</li>
+      <li>For antidiagonal, we can see that as row increases, col also needs to increase by the same amount so the different between row and col stays the same</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="approach">Approach</h1>
+<ol>
+  <li>create datastructures to store col, diag, antidiag</li>
+  <li>cal recursion funtion which will return the count</li>
+</ol>
+
+<p>Recursion function</p>
+<ol>
+  <li>The recursion function will has the current row as its argument and it will return once it reaches n;</li>
+  <li>For the given row we need to check for each column
+    <ul>
+      <li>check column</li>
+      <li>check if row + col already exist in diag</li>
+      <li>check if row - col + n - 1(n - 1 used to avoid neg numbers) exist in antidiag</li>
+    </ul>
+  </li>
+  <li>If valid, update col, diag, antidiag and recur</li>
+  <li>After returning from recursion call, update col, diag, antidiag again to make them ready for next iteration</li>
+</ol>
+
+<h1 id="complexity">Complexity</h1>
+<ul>
+  <li>Time complexity: O(n ^ 2)</li>
+</ul>
+
+<h1 id="code">Code</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    int totalNQueens(int n) {
+        vector&lt;bool&gt; col(n), diag(2*n-1), anti_diag(2*n-1);
+        return solve(col, diag, anti_diag, 0);
+    }
+   
+    int solve(vector&lt;bool&gt;&amp; col, vector&lt;bool&gt;&amp; diag, vector&lt;bool&gt;&amp; anti_diag, int row) {
+        int n = size(col), count = 0;
+        if(row == n) return 1;
+        for(int column = 0; column &lt; n; column++)           
+            if(!col[column] &amp;&amp; !diag[row + column] &amp;&amp; !anti_diag[row - column + n - 1]){ 
+                col[column] = diag[row + column] = anti_diag[row - column + n - 1] = true;
+                count += solve(col, diag, anti_diag, row + 1); 
+                col[column] = diag[row + column] = anti_diag[row - column + n - 1] = false; 
+            }                                
+        return count;
+    }
+</code></pre></div></div>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-string-with-concatenation-of-all-words" title="[LC] 30. Substring with Concatenation of All Words">&larr; Older</a>
+      
+      
+        <a href="/posts/lc-divide-nodes-into-the-maximum-number-of-groups" title="[LC] 2493. Divide Nodes Into the Maximum Number of Groups">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

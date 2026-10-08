@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[CS][DS] Fenwick Tree — Jae Moon</title>
+  
+  
+  <meta name="description" content="Fenwick Tree or Binary Indexed Tree">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CS][DS] Fenwick Tree">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/cs-ds-fenwick-tree">
+  <meta property="og:description" content="Fenwick Tree or Binary Indexed Tree">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/cs-ds-fenwick-tree">
+  <meta name="twitter:title" content="[CS][DS] Fenwick Tree">
+  <meta name="twitter:description" content="Fenwick Tree or Binary Indexed Tree">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=cs" class="post-header-tag invert-hover" title="See all posts tagged CS">
+      <span class="tag">CS</span>
+    </a>
+  
+    <a href="/#tag=ds" class="post-header-tag invert-hover" title="See all posts tagged DS">
+      <span class="tag">DS</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2023.01.06 · 2 min</p>
+  <h1 class="article-title">[CS][DS] Fenwick Tree</h1>
+  
+    
+      <p class="article-description">Fenwick Tree or Binary Indexed Tree</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="when-is-fenwick-tree-used">When is Fenwick tree used</h1>
+<ul>
+  <li>Fenwick tree is used when we need to look for range sums for cases where elements keep getting updated</li>
+  <li>If elements do get updated we can probably use something like prefix sum array which is more efficient</li>
+  <li>Fenwick tree is often compared to segment tree but, I would prefer Fenwick because it is a lot simpler to implement and is the same in terms of efficiency</li>
+</ul>
+
+<h1 id="implementation">Implementation</h1>
+<ul>
+  <li>Fenwick tree is similar prefix sum array in that tree[i] represents aggregate sum of multiple indices</li>
+  <li>However while for prefix sum array, prefix[i] is sum of array 0 ~ i, this is not the case for Fenwick tree</li>
+  <li>Think of it as a <em>partial sum array</em></li>
+  <li>Basically if A can turn into B after keep adding 1 to its last bit that is 1, they fall into same group</li>
+</ul>
+
+<p>So now the question is how do we know which indices tree[i] need to contain?</p>
+<ul>
+  <li>Every indices can be represented in binary form ex) 2 -&gt; 10</li>
+  <li>We can use bitwise operation to isolate the last bit that is 1</li>
+  <li>Then we can add that to the index and keep repeating it until we go out of bound</li>
+  <li>Now, all the indices that we have visited fall into a same group</li>
+  <li>If we have n numbers in the tree then, we can represent all the indices in logn bits, which our operations will take at most logn time</li>
+  <li>Notice that we need to isolate at least 1 bit. If we use 0-indexed array and try to calculate for index 0, then it wouldn’t work. That is why we need to use 1-indexed array for this.</li>
+</ul>
+
+<p><img src="https://he-s3.s3.amazonaws.com/media/uploads/68f2369.jpg" alt="" /></p>
+
+<h1 id="code-snippet">Code Snippet</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vector&lt;int&gt; tree(n + 1);
+void update(int index, int val) {
+    ++index;
+    while (index &lt;= n) {
+        tree[index] += val;
+        index += index &amp; (-index);
+    }
+}
+int get_sum(int index) {
+    ++index;
+    int sum = 0;
+    while (index &gt; 0) {
+        sum += tree[index];
+        index -= index &amp; (-index);
+    }
+    return sum;
+}
+</code></pre></div></div>
+
+<h1 id="complecity">Complecity</h1>
+<ul>
+  <li>space complexity: O(n)</li>
+  <li>time complexity: O(logn)</li>
+</ul>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>https://www.hackerearth.com/practice/notes/binary-indexed-tree-or-fenwick-tree/</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/cs-cpp-integer-representations" title="[CS][CPP] Integer Representations">&larr; Older</a>
+      
+      
+        <a href="/posts/cpp-how-cpp-works" title="[CPP] How C++ works">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

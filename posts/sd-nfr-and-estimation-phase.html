@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[SD] System Design Template: 2. NFR + Estimation — Jae Moon</title>
+  
+  
+  <meta name="description" content="Step 2 after functional requirements: turn non-functional requirements into capacity estimates">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[SD] System Design Template: 2. NFR + Estimation">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/sd-nfr-and-estimation-phase">
+  <meta property="og:description" content="Step 2 after functional requirements: turn non-functional requirements into capacity estimates">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/sd-nfr-and-estimation-phase">
+  <meta name="twitter:title" content="[SD] System Design Template: 2. NFR + Estimation">
+  <meta name="twitter:description" content="Step 2 after functional requirements: turn non-functional requirements into capacity estimates">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=system-design" class="post-header-tag invert-hover" title="See all posts tagged System design">
+      <span class="tag">System design</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2026.10.07 · 4 min</p>
+  <h1 class="article-title">[SD] System Design Template: 2. NFR + Estimation</h1>
+  
+    
+      <p class="article-description">Step 2 after functional requirements: turn non-functional requirements into capacity estimates</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="step-2-nfr--estimation">Step 2: NFR + estimation</h1>
+
+<p>After defining the <strong>functional requirements</strong>—what the system must do—identify its non-functional requirements (NFRs), such as scale, latency, availability, consistency, and geographic reach. Then turn those requirements into capacity estimates.</p>
+
+<h2 id="why-estimate-early">Why estimate early?</h2>
+
+<p>Before choosing an architecture, translate the product requirements into a small set of capacity targets. These estimates help guide decisions about storage, caching, replication, and geographic deployment.</p>
+
+<h1 id="1-scale">1. Scale</h1>
+
+<p>Ask for, or make explicit assumptions about:</p>
+
+<ul>
+  <li>Daily active users (DAU)</li>
+  <li>Relevant actions per user per day</li>
+  <li>Read/write ratio</li>
+</ul>
+
+<p>Let <code class="highlighter-rouge">actions/day = DAU × actions per user per day</code>. Split those actions by the read/write ratio to estimate daily reads and writes.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>average QPS ≈ requests/day ÷ 86,400
+</code></pre></div></div>
+
+<p>For quick mental math, <code class="highlighter-rouge">requests/day ÷ 100,000</code> is a close approximation. Apply it separately to reads and writes. This assumes actions roughly correspond to requests; account for extra service calls or fan-out when the design requires them.</p>
+
+<h2 id="from-workload-mix-to-design-decisions">From workload mix to design decisions</h2>
+
+<p>Use the read/write estimates to identify the likely capacity bottleneck, then choose a design that addresses it.</p>
+
+<h3 id="read-heavy-workloads">Read-heavy workloads</h3>
+
+<ul>
+  <li>Add a <strong>cache</strong> to serve repeated reads without reaching the database.</li>
+  <li>Add <strong>read replicas</strong> to spread database reads across more nodes.</li>
+  <li>Use a <strong>CDN</strong> for static, cacheable, or media content that can be served near users.</li>
+  <li><strong>Horizontal sharding</strong> can increase aggregate read capacity too, but usually isn’t the first choice when reads are the only bottleneck.</li>
+</ul>
+
+<h3 id="write-heavy-workloads">Write-heavy workloads</h3>
+
+<ul>
+  <li>Use <strong>horizontal sharding</strong> to spread writes and storage across partitions when one database can no longer handle the load.</li>
+  <li>Use <strong>queues or batching</strong> when writes can be processed asynchronously, smoothing bursts and reducing per-write overhead.</li>
+  <li>For very high append-heavy throughput, consider write-optimized stores such as <strong>Cassandra</strong> or <strong>ScyllaDB</strong>. These use an LSM-based design: writes go to a write-ahead log (WAL) and an in-memory memtable, then flush to disk in large sequential batches. This minimizes random disk access and improves write throughput.</li>
+</ul>
+
+<h3 id="rule-of-thumb">Rule of thumb</h3>
+
+<ul>
+  <li>Read bottleneck → cache or read replicas</li>
+  <li>Write or storage bottleneck → horizontal sharding</li>
+  <li>Bursty asynchronous writes → queue or batch</li>
+  <li>Very high append-heavy write throughput → LSM-based store</li>
+</ul>
+
+<h1 id="2-traffic-shape">2. Traffic shape</h1>
+
+<p>Ask about peak factor, burstiness, and hot spots or skew. If no traffic shape is given, assume a peak around <code class="highlighter-rouge">3×</code> average as a starting point.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>peak read QPS  = average read QPS × peak factor
+peak write QPS = average write QPS × peak factor
+</code></pre></div></div>
+
+<p>The same peak factor may not fit every workload. A flash crowd, scheduled job, or a few very popular keys can create short bursts or hot spots beyond the average peak estimate.</p>
+
+<h1 id="3-latency">3. Latency</h1>
+
+<p>Ask for the target latency and whether p95 or p99 matters. For normal interactive requests, a reasonable starting assumption is roughly <strong>under 200 ms</strong>. Tail latency targets matter when a slow request can hold up a user action or a larger request assembled from many services.</p>
+
+<h1 id="4-availability">4. Availability</h1>
+
+<p>Ask what availability target the system needs. If unspecified, start with <strong>99.9%</strong> and clarify whether the target applies to the whole system or a particular user-facing operation.</p>
+
+<p>The target can influence replication, failover, and whether the system needs to run across multiple availability zones (multi-AZ).</p>
+
+<h1 id="5-consistency">5. Consistency</h1>
+
+<p>Ask whether reads must see the latest write (strong consistency) or can lag (eventual consistency).</p>
+
+<ul>
+  <li>Balances, payments, inventory, and uniqueness usually need stronger consistency.</li>
+  <li>Feeds, likes, and analytics can often tolerate eventual consistency.</li>
+</ul>
+
+<p>Choose based on what incorrect or stale results mean for the product.</p>
+
+<h1 id="6-geography">6. Geography</h1>
+
+<p>Ask whether the system serves one region or users around the world, and whether it needs low latency worldwide. These answers inform CDN use, multi-region deployment, and the replication strategy.</p>
+
+<h1 id="7-data-size">7. Data size</h1>
+
+<p>Ask for record size, request and response payload sizes, and media size when relevant. If no values are given, useful starting assumptions are:</p>
+
+<ul>
+  <li>Metadata record: about <strong>1 KB</strong></li>
+  <li>Image: about <strong>1–5 MB</strong></li>
+  <li>Video: estimate from the problem’s requirements</li>
+</ul>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>storage growth/day = writes/day × bytes per write
+bandwidth          = QPS × payload size
+</code></pre></div></div>
+
+<p>Use consistent units and distinguish stored data from replicated copies, indexes, and backups when estimating total capacity. For large payloads, estimate reads and writes separately if their rates or payload sizes differ.</p>
+
+<h1 id="what-to-carry-forward">What to carry forward</h1>
+
+<p>Most designs only need these headline estimates:</p>
+
+<ul>
+  <li>Average read QPS</li>
+  <li>Average write QPS</li>
+  <li>Peak read QPS</li>
+  <li>Peak write QPS</li>
+  <li>Storage growth per day</li>
+  <li>Bandwidth, when payloads are large</li>
+</ul>
+
+<p>If the interviewer gives no numbers, state assumptions clearly. For a large consumer system, one possible starting point is:</p>
+
+<blockquote>
+  <p>I’ll assume 100M DAU, roughly 10 relevant actions per user per day, a 3× peak factor, and around 1 KB per metadata record.</p>
+</blockquote>
+
+<p>Then split actions into reads and writes using an explicit ratio before deriving QPS and storage growth.</p>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/sd-consistent-hashing" title="[SD] Consistent Hashing">&larr; Older</a>
+      
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[CPP] Move Semantics — Jae Moon</title>
+  
+  
+  <meta name="description" content="Move Semantics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CPP] Move Semantics">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/cpp-move-semantics">
+  <meta property="og:description" content="Move Semantics">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/cpp-move-semantics">
+  <meta name="twitter:title" content="[CPP] Move Semantics">
+  <meta name="twitter:description" content="Move Semantics">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=cpp" class="post-header-tag invert-hover" title="See all posts tagged CPP">
+      <span class="tag">CPP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2023.01.28 · 2 min</p>
+  <h1 class="article-title">[CPP] Move Semantics</h1>
+  
+    
+      <p class="article-description">Move Semantics</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="move-semantics">Move Semantics</h1>
+<h3 id="lvalue-reference">lvalue reference</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void test(int&amp; a);
+test(1);
+int a = 2;
+test(a);
+</code></pre></div></div>
+
+<p>First call to test is considered invalid because we are passing in a rvalue when lvalue is needed.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void test(const int&amp; a);
+test(1);
+</code></pre></div></div>
+
+<p>However, if we switch the function signture to take in const lvalue ref instead it will work fine. It will just create a temporary variable and use it as the argument.</p>
+
+<h3 id="why-move-semantics-is-necessary">Why Move Semantics is necessary</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class String {
+public:
+    String() = default;
+    String(const char * input_str) {
+        cout &lt;&lt; "Created" &lt;&lt; endl;
+        length = strlen(input_str);
+        str = new char[length];
+        memcpy(str, input_str, length);
+    }
+    
+    String(const String&amp; og){
+        cout &lt;&lt; "Copied" &lt;&lt; endl;
+        length = og.length;
+        str = new char[length];
+        memcpy(str, og.str, length);
+    }
+    
+    ~String() {
+        delete[] str;
+    }
+    
+private:
+    char * str;
+    int length;
+};
+
+
+class Wrapper{
+public:
+    Wrapper(const String&amp; input_str) : str(input_str) {}
+
+private:
+    String str;
+};
+
+
+int main() {
+    Wrapper a("123");
+}
+</code></pre></div></div>
+
+<p>The result will look something like “Created \n Copied”. One problem with this is that the copying part can become very costly if the object we are tying to copy is large and this is where move sematics comes in.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String(String&amp;&amp; og) {
+    cout &lt;&lt; "Moved" &lt;&lt; endl;
+    length = og.length;
+    str = og.str;
+    og.str = nullptr;
+}
+</code></pre></div></div>
+
+<p>Let’s overload the String constructor with a move construtor that takes in rvalue. Notice our previous constructor could take in both lvalue and rvalue and for this move constructor we will only take in rvalue and what it will do is basically shallow copying. Since it is a rvalue we know the input variable will not be reused so we can just do shallow copy and avoid memory allocation this way.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Wrapper(String&amp;&amp; input_str) : str((String&amp;&amp;)input_str) {}
+</code></pre></div></div>
+
+<p>In the initializer list, we have to convert input_str into rvalue if not, the previously made String constructor will be called instead of the move constructor. Another way to do this is by using the std::move method.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Wrapper(String&amp;&amp; input_str) : str(move(input_str)) {}
+</code></pre></div></div>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>move semantics: https://www.youtube.com/watch?v=ehMg6zvXuMY&amp;list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&amp;index=89</li>
+  <li>std::move: https://www.youtube.com/watch?v=OWNeCTd7yQE&amp;list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb&amp;index=90</li>
+</ul>
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/cpp-variadic-template" title="[CPP] Variadic Template">&larr; Older</a>
+      
+      
+        <a href="/posts/math-how-to-check-if-two-lines-intersect" title="[Math] How to check if two lines intersect">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>

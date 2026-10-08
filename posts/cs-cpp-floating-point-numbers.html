@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  
+    <title>[CS][CPP] Floating Point Numbers — Jae Moon</title>
+  
+  
+  <meta name="description" content="Floating point number representations">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="[CS][CPP] Floating Point Numbers">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moonjae.github.io/posts/cs-cpp-floating-point-numbers">
+  <meta property="og:description" content="Floating point number representations">
+  <meta property="og:site_name" content="Jae Moon">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://moonjae.github.io/posts/cs-cpp-floating-point-numbers">
+  <meta name="twitter:title" content="[CS][CPP] Floating Point Numbers">
+  <meta name="twitter:description" content="Floating point number representations">
+
+  
+    <meta property="og:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+    <meta name="twitter:image" content="https://moonjae.github.io/assets/hero-plate-3c682fcceb74384768e2932dc5e5738e6a151db046c883b6ebb4aafb783b207b.jpg">
+  
+
+  <link href="https://moonjae.github.io/feed.xml" type="application/rss+xml" rel="alternate" title="Jae Moon Last 10 blog posts" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon-ec4b61548337758681aaef2515412f5f9956d081dc99e3fcd5dc8cd34c3060c5.svg">
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon-156c8a821aab436b76ee165cc925aa19338b4619cbb727a1277e7bb7ec419fd1.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-60aaeb1ad3065972c18b0d9730d1079d8be497edc14501571081dbc5c4997902.png">
+
+  <!-- Fonts: Amiri (display), Space Mono (metadata), EB Garamond (serif body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="/assets/main-c4358c935cbbfe6811548d5c40e49d2cf06d29bed0c908e2e09e85d389f72ce8.css" integrity="sha256-xDWMk1y7/mgRVI1cQOSdLPBtKb7QyQji4J6F04n3LOg=" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="paper-grain" aria-hidden="true"></div>
+  
+  <main>
+    <!-- Post header: the only page that needs one. Name goes home. -->
+<header class="post-header">
+  <a href="/" class="post-header-home invert-hover">
+    <span>Jae Moon</span>
+    <span aria-hidden="true">&larr;</span>
+  </a>
+  
+    <a href="/#tag=cs" class="post-header-tag invert-hover" title="See all posts tagged CS">
+      <span class="tag">CS</span>
+    </a>
+  
+    <a href="/#tag=cpp" class="post-header-tag invert-hover" title="See all posts tagged CPP">
+      <span class="tag">CPP</span>
+    </a>
+  
+</header>
+
+<article class="article">
+  <p class="article-meta">2022.12.19 · 2 min</p>
+  <h1 class="article-title">[CS][CPP] Floating Point Numbers</h1>
+  
+    
+      <p class="article-description">Floating point number representations</p>
+    
+  
+
+  <div class="prose">
+    <h1 id="floating-point-numbers">Floating Point Numbers</h1>
+<p>In C++, floating point numbers can be represented in two data types; float and double</p>
+
+<h3 id="float">Float</h3>
+<p>1 sign bit + 8 bits for exponent + 23 bits for significant values</p>
+
+<h3 id="double">Double</h3>
+<p>1 sign bit + 11 bits for exponent + 52 bits for significant values</p>
+
+<h1 id="steps-for-ieee-754-singledouble-representation">Steps for IEEE 754 single/double representation</h1>
+<ol>
+  <li>Convert floating number to binary number
+    <ul>
+      <li>ex) 123.75</li>
+      <li>first, convert 123 into two’s complement -&gt; 1111011</li>
+      <li>convert .75 into two’s complement 
+– multiply .75 by 2 -&gt; 1.5 remainder 1
+– subtract 1 from 1.5, 0.5 * 2 -&gt; 1.0 remainder 1 
+– (this process needs to be repeated until we end up with 0 or a cycle)
+– -&gt; 11</li>
+      <li>so all together 123.75 becomes 1111011.11</li>
+    </ul>
+  </li>
+  <li>Convert binary number into normalized form
+    <ul>
+      <li>1111011.11 -&gt; 1.11101111 * 2^6</li>
+    </ul>
+  </li>
+  <li>Convert number in normalized form into IEEE 754 single representation
+    <ul>
+      <li>The first bit is sign bit; 0 when positive and 1 and negative</li>
+      <li>The second section is 8bit exponent 
+– For the exponent, we have 6
+– We need to add bias(2 ^ (n-1) - 1) + to our exponent 
+– -&gt; 127 + 6 -&gt; 133 -&gt; 10000101</li>
+      <li>The last section is 23 bit significant values
+– because it needs to store significant values, the very first value will always be 1 
+– and therefore, we don’t need to store it -&gt; 1110 1111 0000 0000 0000 0</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Pictorial Explanation 
+<img src="https://www.log2base2.com/images/storage/how-float-values-are-stored-in-memory.png" alt="" /></p>
+
+<h1 id="why-bias-is-used">Why bias is used</h1>
+<ul>
+  <li>exponent section consists of 8 bits</li>
+  <li>if we had the first bit as sign bit that we are left with 7bits</li>
+  <li>which means the minimum number we can represent 128 numbers each for pos and neg 
+– one problem with this is neg:[-127: 0] pos:[0: 127] which means we have 2 different representations for 0 
+– therfore, we can rearrange the ranges and make neg: [-127: 0] pos: [1: 128]
+– because the minimum number we can have is -127, we can make all the possible numbers positive if we set bias to 127</li>
+  <li>So by using bias, represent everynumber as positive numbers so we can just store is as unsigned number</li>
+  <li>and makes comparison easier</li>
+</ul>
+
+<h1 id="precision--when-to-use-double-over-float-and-vice-versa">Precision / When to use double over float and vice versa</h1>
+<ul>
+  <li>no of sig bits of float is 23 bits -&gt; 8388608 -&gt; 7 decimal digits</li>
+  <li>no of sig bits of double is 52 bits -&gt; 4.5035996e+15 -&gt; 15 decimal digits</li>
+  <li>double is about 2x more precise</li>
+  <li>single precision arithmetic is faster</li>
+</ul>
+
+<h1 id="sources">Sources</h1>
+<ul>
+  <li>https://stackoverflow.com/questions/2835278/what-is-a-bias-value-of-floating-point-numbers</li>
+  <li>https://www.log2base2.com/storage/how-float-values-are-stored-in-memory.html</li>
+  <li>https://www.youtube.com/watch?v=aE2kVS0O0OE (special numbers)</li>
+  <li>https://www.youtube.com/watch?v=WZUPNXsusOA (denorms)</li>
+</ul>
+
+
+  </div>
+
+  
+    <nav class="article-nav" aria-label="Adjacent posts">
+      
+        <a href="/posts/lc-regions-cut-by-slashes" title="[LC] 959. Regions Cut By Slashes">&larr; Older</a>
+      
+      
+        <a href="/posts/cs-cpp-integer-representations" title="[CS][CPP] Integer Representations">Newer &rarr;</a>
+      
+    </nav>
+  
+
+  
+</article>
+
+  </main>
+  <footer class="footer">
+  <div class="footer-col">
+    <p class="footer-name">Jae Moon</p>
+    <p class="footer-copy">© 2026</p>
+  </div>
+  <div class="footer-col">
+    <ul class="footer-links">
+      
+        <li><a href="/about">About</a></li>
+      
+      
+      
+        <li><a href="https://github.com/moonjae" rel="noreferrer noopener" target="_blank">GitHub</a></li>
+      
+      
+        <li><a href="https://www.linkedin.com/in/jae-moon" rel="noreferrer noopener" target="_blank">LinkedIn</a></li>
+      
+      
+      
+      
+      
+        <li><a href="/feed.xml">RSS</a></li>
+      
+    </ul>
+  </div>
+</footer>
+
+  
+
+<script integrity="sha256-xoNuwFiL3ovMxLakXYCw3Di+UGmGXoeXTv8eyY+i0Nw=" crossorigin="anonymous" type="text/javascript" src="/assets/vendor-c6836ec0588bde8bccc4b6a45d80b0dc38be5069865e87974eff1ec98fa2d0dc.js"></script>
+<script integrity="sha256-2vMA0M7NA+1UKnfDTtLwxCuNB1P8aNAb7lBBukIq9rk=" crossorigin="anonymous" type="text/javascript" src="/assets/application-daf300d0cecd03ed542a77c34ed2f0c42b8d0753fc68d01bee5041ba422af6b9.js"></script>
+
+</body>
+</html>
