@@ -59,7 +59,7 @@
 </header>
 
 <article class="article">
-  <p class="article-meta">2026.10.07 · 3 min</p>
+  <p class="article-meta">2026.10.07 · 4 min</p>
   <h1 class="article-title">[SD] System Design Template: 2. NFR + Estimation</h1>
   
     
@@ -114,11 +114,35 @@ peak write QPS = average write QPS × peak factor
 
 <h2 id="low-latency">Low latency</h2>
 
-<p>Reduce repeated or distant work: cache database reads/computation; use a CDN; precompute expensive results; and move non-critical work async. Keep utilization below saturation to avoid queue buildup and p95/p99 spikes. Reduce cross-region calls by routing users to the nearest region, replicating read data locally, keeping dependent services together, using regional caches, and avoiding synchronous cross-region calls on the critical path.</p>
+<p>Reduce repeated or distant work and keep utilization below saturation:</p>
+
+<ul>
+  <li><strong>Cache</strong> database reads or computation; use a <strong>CDN</strong> to serve content closer to users.</li>
+  <li>Keep utilization below saturation to prevent queue buildup and p95/p99 spikes.</li>
+  <li>Reduce cross-region calls:
+    <ul>
+      <li>Route users to the nearest region and replicate read data locally.</li>
+      <li>Keep dependent services in the same region and use regional caches.</li>
+      <li>Avoid synchronous cross-region calls on the critical path.</li>
+    </ul>
+  </li>
+</ul>
+
+<ul>
+  <li>Precompute expensive results when possible.</li>
+  <li>Move non-critical work to asynchronous processing.</li>
+</ul>
 
 <h1 id="4-availability">4. Availability</h1>
 
 <p>Ask for the target (default <strong>99.9%</strong>) and its scope: whole system or user-facing operation. It affects replication, failover, and multi-AZ deployment.</p>
+
+<ul>
+  <li>Run multiple service instances across availability zones; use health checks and automatic failover to route around failures. Keep services stateless where possible.</li>
+  <li>Replication choice depends on acceptable data loss: <strong>async</strong> replication offers lower latency and can keep writes available, but replicas may lag and failover may lose recent writes. <strong>Sync/quorum</strong> replication better protects committed writes but can add latency or reduce write availability when replicas are unreachable.</li>
+  <li>Use multi-region deployment for regional failures, with added routing and data-conflict complexity.</li>
+  <li>Define recovery objectives: <strong>RPO</strong> (acceptable data loss) and <strong>RTO</strong> (acceptable recovery time).</li>
+</ul>
 
 <h1 id="5-consistency">5. Consistency</h1>
 
